@@ -11,3 +11,4 @@ aiofile==3.8.5
 python-dotenv==1.0.0
 SQLAlchemy==2.0.13
 psycopg2==2.9.6
+passlib==1.7.4
