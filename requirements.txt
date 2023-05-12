@@ -3,3 +3,11 @@ uvicorn==0.22.0
 
 #for template  #new
 Jinja2==3.1.2
+
+#for static files
+aiofile==3.8.5
+
+
+python-dotenv==1.0.0
+SQLAlchemy==2.0.13
+psycopg2==2.9.6
