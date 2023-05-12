@@ -24,7 +24,9 @@ class WorkingHoursCreate(BaseModel):
             datetime.strptime(value, "%H:%M")
         except ValueError as e:
             raise ValueError("Wrong time format")
+        return value
 
+    # TODO Add validator checking if end time > start time
 
 class WorkingHoursShow(BaseModel):
     day_of_week: str

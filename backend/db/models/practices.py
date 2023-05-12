@@ -11,3 +11,4 @@ class Practice(Base):
     street_number = Column(String, nullable=False)
     apartment_number = Column(Integer, nullable=True)
     working_hours = relationship("WorkingHours", back_populates="practice")
+    # TODO Add city and unique name that is name+street+number+city
