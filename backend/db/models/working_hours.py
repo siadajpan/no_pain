@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils import ChoiceType
 
-from db.base import Base
+from db.base_class import Base
+from schemas.types import DayOfWeek
 
 
 class WorkingHours(Base):
@@ -10,3 +12,6 @@ class WorkingHours(Base):
     user = relationship("User", back_populates="working_hours")
     practice_id = Column(Integer, ForeignKey("practice.id"))
     practice = relationship("Practice", back_populates="working_hours")
+    day_of_week = Column(String, nullable=False)
+    start_time = Column(String, nullable=False)
+    end_time = Column(String, nullable=False)
