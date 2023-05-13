@@ -26,7 +26,11 @@ class WorkingHoursCreate(BaseModel):
             raise ValueError("Wrong time format")
         return value
 
-    # TODO Add validator checking if end time > start time
+    @staticmethod
+    def validate_start_less_than_end(start_time, end_time):
+        if datetime.strptime(start_time, "%H:%M") >= datetime.strptime(end_time, "%H:%M"):
+            raise ValueError("Start time is after end time")
+
 
 class WorkingHoursShow(BaseModel):
     day_of_week: str

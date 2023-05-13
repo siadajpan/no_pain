@@ -5,13 +5,15 @@ from pydantic import BaseModel
 
 class PracticeCreate(BaseModel):
     name: str
+    city: str
     street: str
     street_number: str
     apartment_number: Optional[str]
-    # TODO Add creating unique name that is name + street
+
 
 class PracticeShow(BaseModel):
     name: str
+    city: str
     street: str
     street_number: str
     apartment_number: Optional[str]

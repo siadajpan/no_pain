@@ -1,14 +1,17 @@
-from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 
 from db.models.working_hours import WorkingHours
-from db.session import get_db
-from schemas.working_hours import WorkingHoursCreate, WorkingHoursShow
+from schemas.working_hours import WorkingHoursCreate
+
 
 def create_new_working_hours(
         working_hours: WorkingHoursCreate,
         db: Session
 ):
+    # TODO How to validate start and end time?
+    # WorkingHoursCreate.validate_start_less_than_end(
+    #     working_hours.start_time, working_hours.end_time
+    # )
     new_working_hours = WorkingHours(
         user_id=working_hours.user_id,
         practice_id=working_hours.practice_id,
