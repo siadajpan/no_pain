@@ -13,3 +13,9 @@ def create_new_practice(practice: PracticeCreate, db: Session):
     db.refresh(new_practice)
 
     return new_practice
+
+
+def retrieve_practice(practice_id: int, db: Session):
+    item = db.query(Practice).filter(Practice.id == practice_id).first()
+
+    return item

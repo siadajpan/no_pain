@@ -11,7 +11,7 @@ def add_user_and_practice(client):
         "email": "testemail@email.com",
         "password": "testing",
     }
-    response = client.post(url="/users/", content=json.dumps(data))
+    response = client.post(url="/users/create", content=json.dumps(data))
     # Add practice
     data = {
         "name": "practice1",
@@ -20,7 +20,7 @@ def add_user_and_practice(client):
         "street": "test address",
         "street_number": "14",
     }
-    response = client.post(url="/practices/", content=json.dumps(data))
+    response = client.post(url="/practices/create", content=json.dumps(data))
 
 
 def test_create_working_hours(client):
@@ -34,7 +34,7 @@ def test_create_working_hours(client):
         "start_time": "10:00",
         "end_time": "14:00",
     }
-    response = client.post(url="/working_hours/", content=json.dumps(data))
+    response = client.post(url="/working_hours/create", content=json.dumps(data))
     assert response.status_code == 200
     assert response.json()["start_time"] == "10:00"
     assert response.json()["end_time"] == "14:00"
@@ -61,5 +61,5 @@ def test_create_working_hours_wrong_fields(client, day_of_week, start_time, end_
         "start_time": start_time,
         "end_time": end_time,
     }
-    response = client.post(url="/working_hours/", content=json.dumps(data))
+    response = client.post(url="/working_hours/create", content=json.dumps(data))
     assert response.status_code == 422

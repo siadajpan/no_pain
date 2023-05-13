@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 
-@router.post("/", response_model=WorkingHoursShow)
+@router.post("/create", response_model=WorkingHoursShow)
 def create_working_hours(
     working_hours: WorkingHoursCreate, db: Session = Depends(get_db)
 ):

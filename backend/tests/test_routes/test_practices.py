@@ -13,7 +13,7 @@ def test_create_practice(client, apartment_number):
         "street_number": "14",
         "apartment_number": apartment_number,
     }
-    response = client.post(url="/practices/", content=json.dumps(data))
+    response = client.post(url="/practices/create", content=json.dumps(data))
     assert response.status_code == 200
     assert response.json()["name"] == "practice1"
     assert response.json()["postcode"] == "5000"
@@ -32,7 +32,7 @@ def test_create_user(client):
         "street_number": "14",
         "apartment_number": "4",
     }
-    response = client.post(url="/practices/", content=json.dumps(data))
+    response = client.post(url="/practices/create", content=json.dumps(data))
     assert response.status_code == 200
     assert response.json()["name"] == "practice1"
     assert response.json()["postcode"] == "5000"
