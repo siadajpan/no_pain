@@ -1,9 +1,8 @@
-from sqlalchemy import Column, Integer, ForeignKey, String
-from sqlalchemy.orm import relationship
-from sqlalchemy_utils import ChoiceType
-
 from db.base_class import Base
 from schemas.types import DayOfWeek
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+from sqlalchemy_utils import ChoiceType
 
 
 class WorkingHours(Base):

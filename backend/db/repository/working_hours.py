@@ -1,13 +1,9 @@
-from sqlalchemy.orm import Session
-
 from db.models.working_hours import WorkingHours
 from schemas.working_hours import WorkingHoursCreate
+from sqlalchemy.orm import Session
 
 
-def create_new_working_hours(
-        working_hours: WorkingHoursCreate,
-        db: Session
-):
+def create_new_working_hours(working_hours: WorkingHoursCreate, db: Session):
     # TODO How to validate start and end time?
     # WorkingHoursCreate.validate_start_less_than_end(
     #     working_hours.start_time, working_hours.end_time

@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from pydantic import BaseModel, validator
-
 from schemas.types import DayOfWeek
 
 
@@ -28,7 +27,9 @@ class WorkingHoursCreate(BaseModel):
 
     @staticmethod
     def validate_start_less_than_end(start_time, end_time):
-        if datetime.strptime(start_time, "%H:%M") >= datetime.strptime(end_time, "%H:%M"):
+        if datetime.strptime(start_time, "%H:%M") >= datetime.strptime(
+            end_time, "%H:%M"
+        ):
             raise ValueError("Start time is after end time")
 
 

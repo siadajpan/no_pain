@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class PracticeCreate(BaseModel):
     name: str
+    postcode: str
     city: str
     street: str
     street_number: str
@@ -13,6 +14,7 @@ class PracticeCreate(BaseModel):
 
 class PracticeShow(BaseModel):
     name: str
+    postcode: str
     city: str
     street: str
     street_number: str

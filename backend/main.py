@@ -1,10 +1,9 @@
-from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-
 from apis.base import api_router
 from core.config import settings
 from db.base import Base
 from db.session import engine
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 
 def include_router(app):
@@ -20,8 +19,7 @@ def create_tables():
 
 
 def start_application():
-    app = FastAPI(title=settings.PROJECT_NAME,
-                  version=settings.PROJECT_VERSION)
+    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
     include_router(app)
     configure_static(app)
     create_tables()

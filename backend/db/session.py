@@ -1,9 +1,8 @@
 from typing import Generator
 
+from core.config import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-from core.config import settings
 
 # when using pgadmin
 # SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL

@@ -11,7 +11,7 @@ class UserCreate(BaseModel):
 class ShowUser(BaseModel):
     first_name: str
     last_name: str
-    username: str
+    email: str
 
     class Config:
         orm_mode = True

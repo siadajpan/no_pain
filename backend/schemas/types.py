@@ -5,5 +5,5 @@ DayOfWeek = [
     ("Thursday", "Thursday"),
     ("Friday", "Friday"),
     ("Saturday", "Saturday"),
-    ("Sunday", "Sunday")
+    ("Sunday", "Sunday"),
 ]
