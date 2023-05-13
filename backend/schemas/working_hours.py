@@ -5,8 +5,6 @@ from schemas.types import DayOfWeek
 
 
 class WorkingHoursCreate(BaseModel):
-    user_id: int
-    practice_id: int
     day_of_week: str
     start_time: str
     end_time: str
