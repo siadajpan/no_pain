@@ -23,6 +23,18 @@ def add_user_and_practice(client):
     client.post(url="/practices/create", content=json.dumps(data))
 
 
+def add_working_hours(client):
+    add_user_and_practice(client)
+    data = {
+        "user_id": "0",
+        "practice_id": "0",
+        "day_of_week": "Monday",
+        "start_time": "10:00",
+        "end_time": "14:00",
+    }
+    client.post(url="/working_hours/create", content=json.dumps(data))
+
+
 def test_create_working_hours(client):
     add_user_and_practice(client)
 
@@ -55,11 +67,42 @@ def test_create_working_hours_wrong_fields(client, day_of_week, start_time, end_
 
     # Test adding working hours
     data = {
-        "user_id": "0",
-        "practice_id": "0",
+        "user_id": "1",
+        "practice_id": "1",
         "day_of_week": day_of_week,
         "start_time": start_time,
         "end_time": end_time,
     }
     response = client.post(url="/working_hours/create", content=json.dumps(data))
     assert response.status_code == 422
+
+
+def test_retrieve_working_hours(client):
+    add_working_hours(client)
+    response = client.get("/working_hours/get/1")
+    assert response.status_code == 200
+    assert response.json()["day_of_week"] == "Monday"
+
+
+def test_update_working_hours(client):
+    add_working_hours(client)
+    data = {
+        "user_id": "1",
+        "practice_id": "1",
+        "day_of_week": "Monday",
+        "start_time": "10:00",
+        "end_time": "15:00",
+    }
+
+    response = client.put("/working_hours/update/1", content=json.dumps(data))
+    assert response.json()["msg"] == "Successfully updated data."
+    response = client.get("/working_hours/get/1")
+    assert response.json()["end_time"] == "15:00"
+
+
+def test_delete_working_hours(client):
+    add_working_hours(client)
+    response = client.delete("/working_hours/delete/1")
+    assert response.json()["msg"] == "Successfully deleted data."
+    response = client.get("/working_hours/get/1")
+    assert response.status_code == 404

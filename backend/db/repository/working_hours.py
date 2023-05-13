@@ -18,3 +18,34 @@ def create_new_working_hours(
     db.refresh(new_working_hours)
 
     return new_working_hours
+
+
+def get_working_hours_by_id(working_hours_id: int, db: Session):
+    hours = db.get(WorkingHours, working_hours_id)
+    return hours or None
+
+
+def update_working_hours_by_id(
+    working_hours_id: int, working_hours: WorkingHoursCreate, db: Session
+):
+    existing_hours = db.get(WorkingHours, working_hours_id)
+    if not existing_hours:
+        return 0
+    update_data = working_hours.dict(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(existing_hours, key, value)
+
+    db.add(existing_hours)
+    db.commit()
+    db.refresh(existing_hours)
+    return 1
+
+
+def delete_working_hours_by_id(_id: int, db: Session):
+    working_hours = db.get(WorkingHours, _id)
+    if not working_hours:
+        return 0
+
+    db.delete(working_hours)
+    db.commit()
+    return 1

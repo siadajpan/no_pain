@@ -1,10 +1,9 @@
-from http.client import HTTPException
-
 from db.repository.practices import create_new_practice
 from db.repository.practices import retrieve_practice
 from db.session import get_db
 from fastapi import APIRouter
 from fastapi import Depends
+from fastapi import HTTPException
 from schemas.practices import PracticeCreate
 from schemas.practices import PracticeShow
 from sqlalchemy.orm import Session
