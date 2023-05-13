@@ -11,7 +11,7 @@ def add_user_and_practice(client):
         "email": "testemail@email.com",
         "password": "testing",
     }
-    response = client.post(url="/users/create", content=json.dumps(data))
+    client.post(url="/users/create", content=json.dumps(data))
     # Add practice
     data = {
         "name": "practice1",
@@ -20,7 +20,7 @@ def add_user_and_practice(client):
         "street": "test address",
         "street_number": "14",
     }
-    response = client.post(url="/practices/create", content=json.dumps(data))
+    client.post(url="/practices/create", content=json.dumps(data))
 
 
 def test_create_working_hours(client):

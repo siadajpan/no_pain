@@ -1,9 +1,7 @@
-from apis.v1 import (
-    route_general_pages,
-    route_practice,
-    route_users,
-    route_working_hours,
-)
+from apis.v1 import route_general_pages
+from apis.v1 import route_practice
+from apis.v1 import route_users
+from apis.v1 import route_working_hours
 from fastapi import APIRouter
 
 api_router = APIRouter()

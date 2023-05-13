@@ -1,12 +1,14 @@
 from http.client import HTTPException
 
-from starlette import status
-
-from db.repository.practices import create_new_practice, retrieve_practice
+from db.repository.practices import create_new_practice
+from db.repository.practices import retrieve_practice
 from db.session import get_db
-from fastapi import APIRouter, Depends
-from schemas.practices import PracticeCreate, PracticeShow
+from fastapi import APIRouter
+from fastapi import Depends
+from schemas.practices import PracticeCreate
+from schemas.practices import PracticeShow
 from sqlalchemy.orm import Session
+from starlette import status
 
 router = APIRouter()
 
@@ -17,7 +19,7 @@ def create_practice(practice: PracticeCreate, db: Session = Depends(get_db)):
     return new_practice
 
 
-@router.get("/get/{id}")
+@router.get("/get/{practice_id}")
 def read_practice(practice_id: int, db: Session = Depends(get_db)):
     practice = retrieve_practice(practice_id=practice_id, db=db)
     if not practice:

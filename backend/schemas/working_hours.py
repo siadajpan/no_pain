@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
+from pydantic import validator
 from schemas.types import DayOfWeek
 
 
@@ -19,7 +20,7 @@ class WorkingHoursCreate(BaseModel):
     def ensure_correct_time(cls, value):
         try:
             datetime.strptime(value, "%H:%M")
-        except ValueError as e:
+        except ValueError:
             raise ValueError("Wrong time format")
         return value
 

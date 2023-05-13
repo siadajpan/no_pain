@@ -1,7 +1,9 @@
 from db.repository.working_hours import create_new_working_hours
 from db.session import get_db
-from fastapi import APIRouter, Depends
-from schemas.working_hours import WorkingHoursCreate, WorkingHoursShow
+from fastapi import APIRouter
+from fastapi import Depends
+from schemas.working_hours import WorkingHoursCreate
+from schemas.working_hours import WorkingHoursShow
 from sqlalchemy.orm import Session
 
 router = APIRouter()

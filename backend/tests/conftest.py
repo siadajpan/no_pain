@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
-from typing import Any, Generator
+from typing import Any
+from typing import Generator
 
 import pytest
 from fastapi import FastAPI

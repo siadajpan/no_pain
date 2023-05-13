@@ -1,7 +1,5 @@
 import json
 
-from db.models.users import User
-
 
 def test_create_user(client):
     data = {
@@ -15,7 +13,6 @@ def test_create_user(client):
     assert response.json()["first_name"] == "name"
     assert response.json()["last_name"] == "last_name"
     assert response.json()["email"] == "testemail@email.com"
-
 
 
 def test_adding_same_user_twice(client):
