@@ -1,4 +1,5 @@
 from apis.v1 import route_general_pages
+from apis.v1 import route_login
 from apis.v1 import route_practice
 from apis.v1 import route_users
 from apis.v1 import route_working_hours
@@ -15,3 +16,4 @@ api_router.include_router(
 api_router.include_router(
     route_working_hours.router, prefix="/working_hours", tags=["working_hours"]
 )
+api_router.include_router(route_login.router, prefix="/login", tags=["login"])
