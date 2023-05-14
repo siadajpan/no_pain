@@ -1,6 +1,9 @@
+from typing import List
+
 from db.repository.working_hours import create_new_working_hours
 from db.repository.working_hours import delete_working_hours_by_id
 from db.repository.working_hours import get_working_hours_by_id
+from db.repository.working_hours import get_working_hours_by_user_id
 from db.repository.working_hours import update_working_hours_by_id
 from db.session import get_db
 from fastapi import APIRouter
@@ -15,23 +18,20 @@ router = APIRouter()
 
 
 @router.post("/create", response_model=WorkingHoursShow)
-def create_working_hours(
+async def create_working_hours(
     working_hours: WorkingHoursCreate, db: Session = Depends(get_db)
 ):
-    current_user = 1
-    practice_id = 1
+    print(working_hours.json())
     new_working_hours = create_new_working_hours(
         working_hours=working_hours,
         db=db,
-        user_id=current_user,
-        practice_id=practice_id,
     )
 
     return new_working_hours
 
 
 @router.get("/get/{working_hours_id}", response_model=WorkingHoursShow)
-def get_working_hours(working_hours_id, db: Session = Depends(get_db)):
+async def get_working_hours(working_hours_id, db: Session = Depends(get_db)):
     working_hours = get_working_hours_by_id(working_hours_id, db)
     if not working_hours:
         raise HTTPException(
@@ -39,6 +39,13 @@ def get_working_hours(working_hours_id, db: Session = Depends(get_db)):
             detail=f"Getting working hours failed. Element with id "
             f"{working_hours_id} not found",
         )
+    return working_hours
+
+
+@router.get("/get_user/{user_id}", response_model=List[WorkingHoursShow])
+async def get_user_working_hours(user_id, db: Session = Depends(get_db)):
+    working_hours = get_working_hours_by_user_id(user_id, db)
+    print(working_hours)
     return working_hours
 
 

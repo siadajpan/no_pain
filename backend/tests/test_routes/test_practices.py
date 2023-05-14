@@ -3,6 +3,19 @@ import json
 import pytest
 
 
+def create_practices(client, amount=1):
+    for i in range(amount):
+        data = {
+            "name": f"practice{i}",
+            "postcode": "5000",
+            "city": "Test",
+            "street": "test address",
+            "street_number": f"{i}",
+            "apartment_number": "4",
+        }
+        client.post(url="/practices/create", content=json.dumps(data))
+
+
 @pytest.mark.parametrize("apartment_number", ["150", ""])
 def test_create_practice(client, apartment_number):
     data = {
@@ -43,15 +56,14 @@ def test_create_user(client):
 
 
 def test_read_practice(client):
-    data = {
-        "name": "practice1",
-        "postcode": "5000",
-        "city": "Test",
-        "street": "test address",
-        "street_number": "14",
-        "apartment_number": "4",
-    }
-    client.post(url="/practices/create", content=json.dumps(data))
+    create_practices(client)
     response = client.get(url="/practices/get/1")
     assert response.status_code == 200
-    assert response.json()["name"] == "practice1"
+    assert response.json()["name"] == "practice0"
+
+
+def test_read_practices(client):
+    create_practices(client, amount=10)
+    response = client.get(url="/practices/all")
+    assert response.status_code == 200
+    assert len(response.json()) == 10

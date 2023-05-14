@@ -9,6 +9,8 @@ class WorkingHoursCreate(BaseModel):
     day_of_week: str
     start_time: str
     end_time: str
+    user_id: str
+    practice_id: str
 
     @validator("day_of_week")
     def ensure_correct_day(cls, value):

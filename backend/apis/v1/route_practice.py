@@ -1,4 +1,7 @@
+from typing import List
+
 from db.repository.practices import create_new_practice
+from db.repository.practices import list_practices
 from db.repository.practices import retrieve_practice
 from db.session import get_db
 from fastapi import APIRouter
@@ -27,3 +30,10 @@ def read_practice(practice_id: int, db: Session = Depends(get_db)):
             detail="Practice with that id {id} doesn't exist",
         )
     return practice
+
+
+@router.get("/all", response_model=List[PracticeShow])
+def read_practices(db: Session = Depends(get_db)):
+    practices = list_practices(db=db)
+
+    return practices
