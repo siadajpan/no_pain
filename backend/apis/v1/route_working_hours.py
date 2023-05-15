@@ -1,5 +1,8 @@
+import logging
 from typing import List
 
+from apis.v1.route_login import get_current_user_from_token
+from db.models.users import User
 from db.repository.working_hours import create_new_working_hours
 from db.repository.working_hours import delete_working_hours_by_id
 from db.repository.working_hours import get_working_hours_by_id
@@ -15,23 +18,24 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 router = APIRouter()
+LOGGER = logging.getLogger(__name__)
 
 
 @router.post("/create", response_model=WorkingHoursShow)
-async def create_working_hours(
-    working_hours: WorkingHoursCreate, db: Session = Depends(get_db)
+def create_working_hours(
+    working_hours: WorkingHoursCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user_from_token),
 ):
-    print(working_hours.json())
     new_working_hours = create_new_working_hours(
-        working_hours=working_hours,
-        db=db,
+        working_hours=working_hours, db=db, user_ident=current_user.id
     )
 
     return new_working_hours
 
 
 @router.get("/get/{working_hours_id}", response_model=WorkingHoursShow)
-async def get_working_hours(working_hours_id, db: Session = Depends(get_db)):
+def get_working_hours(working_hours_id, db: Session = Depends(get_db)):
     working_hours = get_working_hours_by_id(working_hours_id, db)
     if not working_hours:
         raise HTTPException(
@@ -42,10 +46,9 @@ async def get_working_hours(working_hours_id, db: Session = Depends(get_db)):
     return working_hours
 
 
-@router.get("/get_user/{user_id}", response_model=List[WorkingHoursShow])
-async def get_user_working_hours(user_id, db: Session = Depends(get_db)):
-    working_hours = get_working_hours_by_user_id(user_id, db)
-    print(working_hours)
+@router.get("/get_user/{user_ident}", response_model=List[WorkingHoursShow])
+def get_user_working_hours(user_ident, db: Session = Depends(get_db)):
+    working_hours = get_working_hours_by_user_id(user_ident, db)
     return working_hours
 
 

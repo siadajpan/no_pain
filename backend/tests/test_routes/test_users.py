@@ -2,6 +2,7 @@ import json
 
 
 def create_users(client, amount=1):
+    users = []
     for i in range(amount):
         data = {
             "first_name": f"name{i}",
@@ -9,7 +10,9 @@ def create_users(client, amount=1):
             "email": f"testemail{i}@email.com",
             "password": "testing",
         }
+        users.append(data)
         client.post(url="/users/create", content=json.dumps(data))
+    return users
 
 
 def test_create_user(client):

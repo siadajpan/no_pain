@@ -9,7 +9,6 @@ class WorkingHoursCreate(BaseModel):
     day_of_week: str
     start_time: str
     end_time: str
-    user_id: str
     practice_id: str
 
     @validator("day_of_week")
