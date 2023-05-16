@@ -9,8 +9,9 @@ from sqlalchemy.orm import relationship
 class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, nullable=False, unique=True)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
+    user_type = Column()
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
     email = Column(String, unique=True)
     hashed_password = Column(String, nullable=False)
     is_superuser = Column(Boolean(), default=False)
