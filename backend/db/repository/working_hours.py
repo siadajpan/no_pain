@@ -4,14 +4,14 @@ from sqlalchemy.orm import Session
 
 
 def create_new_working_hours(
-    working_hours: WorkingHoursCreate, db: Session, user_id: int
+    working_hours: WorkingHoursCreate, db: Session, doctor: int
 ):
     # TODO How to validate start and end time?
     # WorkingHoursCreate.validate_start_less_than_end(
     #     working_hours.start_time, working_hours.end_time
     # )
     new_working_hours = WorkingHours(
-        user_id=user_id,
+        doctor_id=doctor,
         **working_hours.dict(),
     )
     db.add(new_working_hours)
@@ -52,11 +52,11 @@ def delete_working_hours_by_id(_id: int, db: Session):
     return 1
 
 
-def get_working_hours_by_user_id(user_id: int, db: Session):
+def get_working_hours_by_doctor_id(doctor_id: int, db: Session):
     all_hours = db.query(WorkingHours).all()
-    print(f"All working hours: {[h.__dict__ for h in all_hours]}, {user_id}")
-    users_working_hours = (
-        db.query(WorkingHours).filter(WorkingHours.user_id == user_id).all()
+    print(f"All working hours: {[h.__dict__ for h in all_hours]}, {doctor_id}")
+    doctors_working_hours = (
+        db.query(WorkingHours).filter(WorkingHours.doctor_id == doctor_id).all()
     )
-    print("User working hours", users_working_hours)
-    return users_working_hours
+    print("User working hours", doctors_working_hours)
+    return doctors_working_hours

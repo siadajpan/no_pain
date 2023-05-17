@@ -4,6 +4,8 @@ from pydantic import BaseModel
 
 
 class PracticeCreate(BaseModel):
+    email: str
+    password: str
     name: str
     postcode: str
     city: str

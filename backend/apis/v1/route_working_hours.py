@@ -5,8 +5,8 @@ from apis.v1.route_login import get_current_user_from_token
 from db.models.users import User
 from db.repository.working_hours import create_new_working_hours
 from db.repository.working_hours import delete_working_hours_by_id
+from db.repository.working_hours import get_working_hours_by_doctor_id
 from db.repository.working_hours import get_working_hours_by_id
-from db.repository.working_hours import get_working_hours_by_user_id
 from db.repository.working_hours import update_working_hours_by_id
 from db.session import get_db
 from fastapi import APIRouter
@@ -28,7 +28,7 @@ def create_working_hours(
     current_user: User = Depends(get_current_user_from_token),
 ):
     new_working_hours = create_new_working_hours(
-        working_hours=working_hours, db=db, user_id=current_user.id
+        working_hours=working_hours, db=db, doctor=current_user.id
     )
 
     return new_working_hours
@@ -46,9 +46,9 @@ def get_working_hours(working_hours_id, db: Session = Depends(get_db)):
     return working_hours
 
 
-@router.get("/get_user/{user_id}", response_model=List[WorkingHoursShow])
-def get_user_working_hours(user_id, db: Session = Depends(get_db)):
-    working_hours = get_working_hours_by_user_id(user_id, db)
+@router.get("/get_doctor/{doctor_id}", response_model=List[WorkingHoursShow])
+def get_user_working_hours(doctor_id, db: Session = Depends(get_db)):
+    working_hours = get_working_hours_by_doctor_id(doctor_id, db)
     return working_hours
 
 

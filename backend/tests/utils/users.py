@@ -22,21 +22,15 @@ def authentication_token_from_email(client: TestClient, email: str, db: Session)
     Return a valid token for the user with given email.
     If the user doesn't exist it is created first.
     """
-    print("Getting user by email")
     user = get_user_by_email(email=email, db=db)
-    print(f"Got user {user}")
     if not user:
-        first_name = "First name"
-        last_name = "Last name"
         user_in_create = UserCreate(
-            first_name=first_name,
-            last_name=last_name,
             email=email,
             password=settings.TEST_USER_PASSWORD,
         )
-        print(f"Created new user {user_in_create}")
         user = create_new_user(user=user_in_create, db=db)
-        print(f"User after creation: {user.username} {user.email}")
+        print(f"Created new user {user}")
+
     return user_authentication_headers(
         client=client, email=email, password=settings.TEST_USER_PASSWORD
     )

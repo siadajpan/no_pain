@@ -1,13 +1,14 @@
 import json
 
 import pytest
+from tests.test_routes.test_doctors import create_test_doctors
 from tests.test_routes.test_practices import create_practices
-from tests.test_routes.test_users import create_users
 from tests.utils.users import user_authentication_headers
 
 
 def add_working_hours(client, amount_users=1, amount_practices=1, amount_wh=1):
-    users = create_users(client, amount_users)
+    users = create_test_doctors(client, amount_users)
+    print(f"created test doctors: {users}")
     headers = [
         user_authentication_headers(
             client=client, email=user["email"], password=user["password"]
@@ -64,9 +65,6 @@ def test_create_working_hours(client, normal_user_token_headers):
 def test_create_working_hours_wrong_fields(
     client, day_of_week, start_time, end_time, normal_user_token_headers
 ):
-    create_users(client)
-    create_practices(client)
-
     # Test adding working hours
     data = {
         "day_of_week": day_of_week,
@@ -112,18 +110,17 @@ def test_delete_working_hours(client, normal_user_token_headers):
     assert response.status_code == 404
 
 
-def test_get_user_working_hours(client, normal_user_token_headers):
-    response = client.get("/working_hours/get_user/1")
+def test_get_doctors_working_hours(client, normal_user_token_headers):
+    response = client.get("/working_hours/get_doctor/1")
     assert response.status_code == 200
     assert len(response.json()) == 0
 
-    print("Adding working hours")
     add_working_hours(
         client,
         amount_users=3,
         amount_practices=2,
         amount_wh=10,
     )
-    response = client.get("/working_hours/get_user/2")
+    response = client.get("/working_hours/get_doctor/2")
     assert response.status_code == 200
     assert response.json()[1]
