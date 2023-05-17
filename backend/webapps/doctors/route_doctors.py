@@ -12,8 +12,9 @@ router = APIRouter(include_in_schema=False)
 
 @router.get("/")
 async def home(request: Request, db: Session = Depends(get_db)):
-    jobs = list_doctors_as_show_doctor(db=db)
+    doctors = list_doctors_as_show_doctor(db=db)
+    print("doctors", doctors)
 
     return templates.TemplateResponse(
-        "general_pages/homepage.html", {"request": request, "jobs": jobs}
+        "general_pages/homepage.html", {"request": request, "doctors": doctors}
     )

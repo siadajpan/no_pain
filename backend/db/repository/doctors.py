@@ -41,6 +41,8 @@ def list_doctors_as_show_doctor(db):
     doctors_and_users = (
         db.query(Doctor, User).join(User, User.id == Doctor.user_id).all()
     )
+    if not len(doctors_and_users):
+        return []
 
     # Show doctor expects an email
     for doctor, user in doctors_and_users:
