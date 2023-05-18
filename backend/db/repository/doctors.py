@@ -1,5 +1,7 @@
 from db.models.doctors import Doctor
+from db.models.practices import Practice
 from db.models.users import User
+from db.models.working_hours import WorkingHours
 from db.repository.users import create_new_user
 from db.repository.users import get_user_by_email
 from fastapi import HTTPException
@@ -31,6 +33,10 @@ def create_new_doctor(doctor: DoctorCreate, db: Session):
     return new_doctor
 
 
+def get_doctor(doctor_id, db):
+    return db.get(Doctor, doctor_id)
+
+
 def list_all_doctors(db):
     doctors = db.query(Doctor).all()
 
@@ -48,3 +54,15 @@ def list_doctors_as_show_doctor(db):
     for doctor, user in doctors_and_users:
         doctor.email = user.email
     return list(zip(*doctors_and_users))[0]
+
+
+def get_doctors_working_hours_and_practices(doctor_id: int, db, group_by_practice=True):
+    doctors_working_hours_practices = (
+        db.query(Practice, WorkingHours)
+        .join(WorkingHours)
+        .filter(WorkingHours.doctor_id == doctor_id)
+        .all()
+    )
+
+    print("User working hours", [d for d in doctors_working_hours_practices])
+    return doctors_working_hours_practices

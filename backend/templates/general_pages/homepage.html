@@ -7,17 +7,13 @@
 
 {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <h1 class="display-5">Find your doctor</h1>
-        </div>
-    </div>
+    <h1 class="display-5">Find your doctor</h1>
     <div class="row">
         {% for doctor in doctors %}
 
         <div class="col-lg-4 col-md-3 col-sm-10 mr-auto">
-            {% with doctor=doctor %}
-                {% include "components/cards.html" %}
+            {% with doctor=doctor, working_hours=working_hours%}
+                {% include "components/doctor_list_card.html" %}
             {% endwith %}
 
             {% if loop.index %3 %}

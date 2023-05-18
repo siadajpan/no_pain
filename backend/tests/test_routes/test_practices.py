@@ -38,6 +38,8 @@ def test_create_practice(client, apartment_number):
     assert response.json()["street"] == "test address"
     assert response.json()["street_number"] == "14"
     assert response.json()["apartment_number"] == apartment_number
+    assert response.json()["id"] is not None
+    assert response.json()["user_id"] is not None
 
 
 def test_read_practice(client):

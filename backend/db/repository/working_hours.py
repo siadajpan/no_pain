@@ -53,8 +53,6 @@ def delete_working_hours_by_id(_id: int, db: Session):
 
 
 def get_working_hours_by_doctor_id(doctor_id: int, db: Session):
-    all_hours = db.query(WorkingHours).all()
-    print(f"All working hours: {[h.__dict__ for h in all_hours]}, {doctor_id}")
     doctors_working_hours = (
         db.query(WorkingHours).filter(WorkingHours.doctor_id == doctor_id).all()
     )

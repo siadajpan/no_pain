@@ -18,12 +18,15 @@ def create_new_practice(practice: PracticeCreate, db: Session):
             detail=f"Creating practice failed. User with that email address "
             f"{practice.email} already exists",
         )
-    create_new_user(UserCreate(email=practice.email, password=practice.password), db)
+    new_user = create_new_user(
+        UserCreate(email=practice.email, password=practice.password), db
+    )
 
     del practice.email
     del practice.password
 
     new_practice = Practice(
+        user_id=new_user.id,
         **practice.dict(),
         descriptor=f"{practice.name}.{practice.city}.{practice.street}.{practice.street_number}.{practice.apartment_number}",
     )

@@ -1,0 +1,30 @@
+{% extends "shared/base.html" %}
+{% block title %}
+<title> {{doctor.first_name}} {{doctor.last_name}}</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="display-5">{{doctor.first_name}} {{doctor.last_name}}</h1>
+    <div class="row">
+        <table class="table table-striped table-hover">
+            <tbody>
+            {% for practice, working_hours in working_hours_practices %}
+            <tr>
+                <td>
+                    {% with working_hours=working_hours %}
+                    {% include "components/working_hours.html" %}
+                    {% endwith %}
+                </td>
+                <td>
+                    {% with practice=practice %}
+                    {% include "components/practice_list_card.html" %}
+                    {% endwith %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

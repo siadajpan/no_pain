@@ -33,6 +33,8 @@ def test_create_doctor(client):
     assert response.status_code == 200
     assert response.json()["first_name"] == "Test name"
     assert response.json()["doctor_type"] == DoctorType.DENTIST.value
+    assert response.json()["id"] is not None
+    assert response.json()["user_id"] is not None
 
 
 def test_adding_same_doctor_twice(client):

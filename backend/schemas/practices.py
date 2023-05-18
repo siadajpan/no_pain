@@ -15,6 +15,8 @@ class PracticeCreate(BaseModel):
 
 
 class PracticeShow(BaseModel):
+    id: str
+    user_id: str
     name: str
     postcode: str
     city: str
