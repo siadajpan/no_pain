@@ -2,10 +2,7 @@
   <div class="card-body">
     <h5 class="card-title">{{practice.name}}</h5>
     <p class="card-text">
-      {{practice.street}} {{practice.street_number}}
-      {% if practice.apartment_number %}
-      / {{practice.apartment_number}}
-      {% endif %}
+      {{practice.address}}
     </p>
     <p>
       {{ practice.postcode }} {{practice.city}}

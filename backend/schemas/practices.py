@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel
 
 
@@ -9,9 +7,7 @@ class PracticeCreate(BaseModel):
     name: str
     postcode: str
     city: str
-    street: str
-    street_number: str
-    apartment_number: Optional[str]
+    address: str
 
 
 class PracticeShow(BaseModel):
@@ -20,9 +16,7 @@ class PracticeShow(BaseModel):
     name: str
     postcode: str
     city: str
-    street: str
-    street_number: str
-    apartment_number: Optional[str]
+    address: str
 
     class Config:
         orm_mode = True

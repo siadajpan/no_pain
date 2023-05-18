@@ -3,21 +3,12 @@ from db.models.practices import Practice
 from db.models.users import User
 from db.models.working_hours import WorkingHours
 from db.repository.users import create_new_user
-from db.repository.users import get_user_by_email
-from fastapi import HTTPException
 from schemas.doctors import DoctorCreate
 from schemas.users import UserCreate
 from sqlalchemy.orm import Session
-from starlette import status
 
 
 def create_new_doctor(doctor: DoctorCreate, db: Session):
-    if get_user_by_email(doctor.email, db):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Creating doctor failed. User with that email address "
-            f"{doctor.email} already exists",
-        )
     new_user = create_new_user(
         UserCreate(email=doctor.email, password=doctor.password), db
     )
@@ -44,9 +35,7 @@ def list_all_doctors(db):
 
 
 def list_doctors_as_show_doctor(db):
-    doctors_and_users = (
-        db.query(Doctor, User).join(User, User.id == Doctor.user_id).all()
-    )
+    doctors_and_users = db.query(Doctor, User).join(User).all()
     if not len(doctors_and_users):
         return []
 

@@ -11,9 +11,7 @@ def create_practices(client, amount=1):
             "name": f"practice{i}",
             "postcode": "5000",
             "city": "Test",
-            "street": "test address",
-            "street_number": f"{i}",
-            "apartment_number": "4",
+            "address": "test address",
         }
         client.post(url="/practices/create", content=json.dumps(data))
 
@@ -26,18 +24,14 @@ def test_create_practice(client, apartment_number):
         "name": "practice1",
         "postcode": "5000",
         "city": "Test",
-        "street": "test address",
-        "street_number": "14",
-        "apartment_number": apartment_number,
+        "address": "test address",
     }
     response = client.post(url="/practices/create", content=json.dumps(data))
     assert response.status_code == 200
     assert response.json()["name"] == "practice1"
     assert response.json()["postcode"] == "5000"
     assert response.json()["city"] == "Test"
-    assert response.json()["street"] == "test address"
-    assert response.json()["street_number"] == "14"
-    assert response.json()["apartment_number"] == apartment_number
+    assert response.json()["address"] == "test address"
     assert response.json()["id"] is not None
     assert response.json()["user_id"] is not None
 
