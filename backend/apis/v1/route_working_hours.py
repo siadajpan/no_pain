@@ -1,6 +1,10 @@
 import logging
 from typing import List
 
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from starlette import status
+
 from backend.apis.v1.route_login import get_current_user_from_token
 from backend.db.models.users import User
 from backend.db.repository.working_hours import (
@@ -11,10 +15,7 @@ from backend.db.repository.working_hours import (
     update_working_hours_by_id,
 )
 from backend.db.session import get_db
-from fastapi import APIRouter, Depends, HTTPException
 from backend.schemas.working_hours import WorkingHoursCreate, WorkingHoursShow
-from sqlalchemy.orm import Session
-from starlette import status
 
 router = APIRouter()
 LOGGER = logging.getLogger(__name__)

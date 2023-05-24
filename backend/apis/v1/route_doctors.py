@@ -1,13 +1,11 @@
 from typing import List
 
-from backend.db.repository.doctors import create_new_doctor
-from backend.db.repository.doctors import list_doctors_as_show_doctor
-from backend.db.session import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from backend.schemas.doctors import DoctorCreate
-from backend.schemas.doctors import ShowDoctor
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+
+from backend.db.repository.doctors import create_new_doctor, list_doctors_as_show_doctor
+from backend.db.session import get_db
+from backend.schemas.doctors import DoctorCreate, ShowDoctor
 
 router = APIRouter()
 

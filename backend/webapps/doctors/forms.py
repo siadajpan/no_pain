@@ -1,7 +1,8 @@
 from typing import List, Optional
 
-from backend.db.models.doctors import DoctorType
 from fastapi import Request
+
+from backend.db.models.doctors import DoctorType
 
 
 class DoctorCreateForm:

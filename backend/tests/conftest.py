@@ -14,7 +14,6 @@ from backend.db.session import get_db
 from backend.tests.utils.users import authentication_token_from_email
 
 
-
 def start_application():
     app = FastAPI()
     app.include_router(api_router)

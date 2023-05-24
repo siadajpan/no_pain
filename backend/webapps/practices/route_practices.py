@@ -1,11 +1,12 @@
-from backend.db.repository.practices import create_new_practice
-from backend.db.session import get_db
 from fastapi import APIRouter, Depends, Request, responses
 from fastapi.templating import Jinja2Templates
-from backend.schemas.practices import PracticeCreate
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette import status
+
+from backend.db.repository.practices import create_new_practice
+from backend.db.session import get_db
+from backend.schemas.practices import PracticeCreate
 from backend.webapps.practices.forms import PracticeCreateForm
 
 templates = Jinja2Templates(directory="templates")

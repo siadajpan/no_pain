@@ -1,3 +1,9 @@
+from fastapi import APIRouter, Depends, Request, responses
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+from starlette import status
+
 from backend.db.models.doctors import DoctorType
 from backend.db.repository.doctors import (
     create_new_doctor,
@@ -5,12 +11,7 @@ from backend.db.repository.doctors import (
     get_doctors_working_hours_and_practices,
 )
 from backend.db.session import get_db
-from fastapi import APIRouter, Depends, Request, responses
-from fastapi.templating import Jinja2Templates
 from backend.schemas.doctors import DoctorCreate
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
-from starlette import status
 from backend.webapps.doctors.forms import DoctorCreateForm
 
 templates = Jinja2Templates(directory="templates")
