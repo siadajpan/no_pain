@@ -1,16 +1,8 @@
-import enum
-
-from db.base_class import Base
-from sqlalchemy import Column
-from sqlalchemy import Enum
-from sqlalchemy import ForeignKey
-from sqlalchemy import Integer
-from sqlalchemy import String
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-
-class DoctorType(enum.Enum):
-    DENTIST = "dentist"
+from backend.db.base_class import Base
+from backend.db.models.doctor_type import DoctorType
 
 
 class Doctor(Base):

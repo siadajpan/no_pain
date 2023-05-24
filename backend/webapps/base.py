@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from webapps import home
-from webapps.doctors import route_doctors
-from webapps.practices import route_practices
+from backend.webapps import home
+from backend.webapps.doctors import route_doctors
+from backend.webapps.practices import route_practices
 
 api_router = APIRouter()
 api_router.include_router(

@@ -1,19 +1,14 @@
 from datetime import timedelta
 
-from core.config import settings
-from core.hashing import Hasher
-from core.security import create_access_token
-from db.repository.login import get_user
-from db.session import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import HTTPException
-from fastapi import status
-from fastapi.security import OAuth2PasswordBearer
-from fastapi.security import OAuth2PasswordRequestForm
-from jose import jwt
-from jose import JWTError
-from schemas.tokens import Token
+from backend.core.config import settings
+from backend.core.hashing import Hasher
+from backend.core.security import create_access_token
+from backend.db.repository.login import get_user
+from backend.db.session import get_db
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from backend.schemas.tokens import Token
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -54,7 +49,7 @@ def get_current_user_from_token(
     )
     try:
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            token, key=settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
         email: str = payload.get("sub")
         if email is None:

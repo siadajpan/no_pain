@@ -1,9 +1,7 @@
-from db.models.doctors import DoctorType
-from db.repository.doctors import list_doctors_as_show_doctor
-from db.session import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import Request
+from backend.db.models.doctors import DoctorType
+from backend.db.repository.doctors import list_doctors_as_show_doctor
+from backend.db.session import get_db
+from fastapi import APIRouter, Depends, Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 

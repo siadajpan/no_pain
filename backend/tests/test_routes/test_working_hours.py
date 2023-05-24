@@ -1,14 +1,14 @@
 import json
 
 import pytest
-from tests.test_routes.test_doctors import create_test_doctors
-from tests.test_routes.test_practices import create_practices
-from tests.utils.users import user_authentication_headers
+
+from backend.tests.test_routes.test_doctors import create_test_doctors
+from backend.tests.test_routes.test_practices import create_practices
+from backend.tests.utils.users import user_authentication_headers
 
 
 def add_working_hours(client, amount_users=1, amount_practices=1, amount_wh=1):
     users = create_test_doctors(client, amount_users)
-    print(f"created test doctors: {users}")
     headers = [
         user_authentication_headers(
             client=client, email=user["email"], password=user["password"]

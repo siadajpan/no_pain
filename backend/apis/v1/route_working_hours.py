@@ -1,19 +1,18 @@
 import logging
 from typing import List
 
-from apis.v1.route_login import get_current_user_from_token
-from db.models.users import User
-from db.repository.working_hours import create_new_working_hours
-from db.repository.working_hours import delete_working_hours_by_id
-from db.repository.working_hours import get_working_hours_by_doctor_id
-from db.repository.working_hours import get_working_hours_by_id
-from db.repository.working_hours import update_working_hours_by_id
-from db.session import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import HTTPException
-from schemas.working_hours import WorkingHoursCreate
-from schemas.working_hours import WorkingHoursShow
+from backend.apis.v1.route_login import get_current_user_from_token
+from backend.db.models.users import User
+from backend.db.repository.working_hours import (
+    create_new_working_hours,
+    delete_working_hours_by_id,
+    get_working_hours_by_doctor_id,
+    get_working_hours_by_id,
+    update_working_hours_by_id,
+)
+from backend.db.session import get_db
+from fastapi import APIRouter, Depends, HTTPException
+from backend.schemas.working_hours import WorkingHoursCreate, WorkingHoursShow
 from sqlalchemy.orm import Session
 from starlette import status
 

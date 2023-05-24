@@ -1,9 +1,7 @@
-from db.base_class import Base
-from sqlalchemy import Column
-from sqlalchemy import ForeignKey
-from sqlalchemy import Integer
-from sqlalchemy import String
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+
+from backend.db.base_class import Base
 
 
 class Patient(Base):

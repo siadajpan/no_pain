@@ -1,6 +1,7 @@
-from db.models.working_hours import WorkingHours
-from schemas.working_hours import WorkingHoursCreate
 from sqlalchemy.orm import Session
+
+from backend.db.models.working_hours import WorkingHours
+from backend.schemas.working_hours import WorkingHoursCreate
 
 
 def create_new_working_hours(
@@ -56,5 +57,4 @@ def get_working_hours_by_doctor_id(doctor_id: int, db: Session):
     doctors_working_hours = (
         db.query(WorkingHours).filter(WorkingHours.doctor_id == doctor_id).all()
     )
-    print("User working hours", doctors_working_hours)
     return doctors_working_hours

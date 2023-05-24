@@ -1,5 +1,8 @@
 import json
 
+import pytest
+from sqlalchemy.exc import IntegrityError
+
 
 def create_users(client, amount=1):
     users = []
@@ -33,5 +36,5 @@ def test_adding_same_user_twice(client):
     assert response.json()["email"] == "testemail@email.com"
     user2 = user.copy()
 
-    response = client.post(url="/users/create", content=json.dumps(user2))
-    assert response.status_code == 404
+    with pytest.raises(IntegrityError):
+        client.post(url="/users/create", content=json.dumps(user2))

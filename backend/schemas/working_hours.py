@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from pydantic import BaseModel
-from pydantic import validator
-from schemas.types import DayOfWeek
+from pydantic import BaseModel, validator
+
+from backend.schemas.types import DayOfWeek
 
 
 class WorkingHoursCreate(BaseModel):

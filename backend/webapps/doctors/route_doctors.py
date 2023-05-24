@@ -1,18 +1,17 @@
-from db.models.doctors import DoctorType
-from db.repository.doctors import create_new_doctor
-from db.repository.doctors import get_doctor
-from db.repository.doctors import get_doctors_working_hours_and_practices
-from db.session import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import Request
-from fastapi import responses
+from backend.db.models.doctors import DoctorType
+from backend.db.repository.doctors import (
+    create_new_doctor,
+    get_doctor,
+    get_doctors_working_hours_and_practices,
+)
+from backend.db.session import get_db
+from fastapi import APIRouter, Depends, Request, responses
 from fastapi.templating import Jinja2Templates
-from schemas.doctors import DoctorCreate
+from backend.schemas.doctors import DoctorCreate
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette import status
-from webapps.doctors.forms import DoctorCreateForm
+from backend.webapps.doctors.forms import DoctorCreateForm
 
 templates = Jinja2Templates(directory="templates")
 router = APIRouter(include_in_schema=False)
@@ -48,7 +47,6 @@ async def register(request: Request, db: Session = Depends(get_db)):
     form = DoctorCreateForm(request)
     await form.load_data()
     if await form.is_valid():
-        print(f"doctor type: {form.doctor_type}")
         new_doctor = DoctorCreate(
             first_name=form.first_name,
             last_name=form.last_name,

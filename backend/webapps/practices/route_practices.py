@@ -1,15 +1,12 @@
-from db.repository.practices import create_new_practice
-from db.session import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import Request
-from fastapi import responses
+from backend.db.repository.practices import create_new_practice
+from backend.db.session import get_db
+from fastapi import APIRouter, Depends, Request, responses
 from fastapi.templating import Jinja2Templates
-from schemas.practices import PracticeCreate
+from backend.schemas.practices import PracticeCreate
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette import status
-from webapps.practices.forms import PracticeCreateForm
+from backend.webapps.practices.forms import PracticeCreateForm
 
 templates = Jinja2Templates(directory="templates")
 router = APIRouter(include_in_schema=False)

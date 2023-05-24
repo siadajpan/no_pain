@@ -1,7 +1,6 @@
-from typing import List
-from typing import Optional
+from typing import List, Optional
 
-from db.models.doctors import DoctorType
+from backend.db.models.doctors import DoctorType
 from fastapi import Request
 
 
@@ -22,7 +21,6 @@ class DoctorCreateForm:
         self.last_name = form.get("last_name")
         self.email = form.get("email")
         self.doctor_type = form.get("doctor_type")
-        print(f"got doctor_type: {self.doctor_type}")
         self.password = form.get("password")
         self.repeat_password = form.get("repeat_password")
 

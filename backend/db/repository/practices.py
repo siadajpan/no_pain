@@ -1,11 +1,11 @@
-from typing import List
-from typing import Type
+from typing import List, Type
 
-from db.models.practices import Practice
-from db.repository.users import create_new_user
-from schemas.practices import PracticeCreate
-from schemas.users import UserCreate
 from sqlalchemy.orm import Session
+
+from backend.db.models.practices import Practice
+from backend.db.repository.users import create_new_user
+from backend.schemas.practices import PracticeCreate
+from backend.schemas.users import UserCreate
 
 
 def create_new_practice(practice: PracticeCreate, db: Session):

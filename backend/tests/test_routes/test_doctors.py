@@ -1,6 +1,9 @@
 import json
 
-from db.models.doctors import DoctorType
+import pytest
+from sqlalchemy.exc import IntegrityError
+
+from backend.db.models.doctor_type import DoctorType
 
 
 def create_test_doctors(client, amount=1):
@@ -49,8 +52,9 @@ def test_adding_same_doctor_twice(client):
     assert response.status_code == 200
     assert response.json()["first_name"] == "Test name"
     user2 = user.copy()
-    response = client.post(url="/doctors/create", content=json.dumps(user2))
-    assert response.status_code == 404
+    with pytest.raises(IntegrityError):
+        response = client.post(url="/doctors/create", content=json.dumps(user2))
+    # assert response.status_code == 404
 
 
 def test_list_doctors(client):

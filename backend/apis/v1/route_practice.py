@@ -1,14 +1,13 @@
 from typing import List
 
-from db.repository.practices import create_new_practice
-from db.repository.practices import list_practices
-from db.repository.practices import retrieve_practice
-from db.session import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import HTTPException
-from schemas.practices import PracticeCreate
-from schemas.practices import PracticeShow
+from backend.db.repository.practices import (
+    create_new_practice,
+    list_practices,
+    retrieve_practice,
+)
+from backend.db.session import get_db
+from fastapi import APIRouter, Depends, HTTPException
+from backend.schemas.practices import PracticeCreate, PracticeShow
 from sqlalchemy.orm import Session
 from starlette import status
 

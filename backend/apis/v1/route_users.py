@@ -1,9 +1,7 @@
-from db.repository.users import create_new_user
-from db.session import get_db
-from fastapi import APIRouter
-from fastapi import Depends
-from schemas.users import ShowUser
-from schemas.users import UserCreate
+from backend.db.repository.users import create_new_user
+from backend.db.session import get_db
+from fastapi import APIRouter, Depends
+from backend.schemas.users import ShowUser, UserCreate
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -11,6 +9,5 @@ router = APIRouter()
 
 @router.post("/create", response_model=ShowUser)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    print(f"passed user: {user}")
     user = create_new_user(user=user, db=db)
     return user

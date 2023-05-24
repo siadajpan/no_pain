@@ -1,6 +1,6 @@
-from db.models.doctors import DoctorType
-from pydantic import BaseModel
-from pydantic import EmailStr
+from pydantic import BaseModel, EmailStr
+
+from backend.db.models.doctors import DoctorType
 
 
 class DoctorCreate(BaseModel):

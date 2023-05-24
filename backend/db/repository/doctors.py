@@ -1,11 +1,12 @@
-from db.models.doctors import Doctor
-from db.models.practices import Practice
-from db.models.users import User
-from db.models.working_hours import WorkingHours
-from db.repository.users import create_new_user
-from schemas.doctors import DoctorCreate
-from schemas.users import UserCreate
 from sqlalchemy.orm import Session
+
+from backend.db.models.doctors import Doctor
+from backend.db.models.practices import Practice
+from backend.db.models.users import User
+from backend.db.models.working_hours import WorkingHours
+from backend.db.repository.users import create_new_user
+from backend.schemas.doctors import DoctorCreate
+from backend.schemas.users import UserCreate
 
 
 def create_new_doctor(doctor: DoctorCreate, db: Session):
@@ -53,5 +54,4 @@ def get_doctors_working_hours_and_practices(doctor_id: int, db, group_by_practic
         .all()
     )
 
-    print("User working hours", [d for d in doctors_working_hours_practices])
     return doctors_working_hours_practices

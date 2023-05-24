@@ -1,7 +1,8 @@
-from core.hashing import Hasher
-from db.models.users import User
-from schemas.users import UserCreate
 from sqlalchemy.orm import Session
+
+from backend.core.hashing import Hasher
+from backend.db.models.users import User
+from backend.schemas.users import UserCreate
 
 
 def create_new_user(user: UserCreate, db: Session):
