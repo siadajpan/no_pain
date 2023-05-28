@@ -3,7 +3,7 @@ import json
 import pytest
 from sqlalchemy.exc import IntegrityError
 
-from backend.db.models.doctor_type import DoctorType
+from backend.db.models.speciality import DoctorSpeciality
 
 
 def create_test_doctors(client, amount=1):
@@ -12,7 +12,7 @@ def create_test_doctors(client, amount=1):
         data = {
             "email": f"testemail{i}@email.com",
             "password": "testing",
-            "doctor_type": DoctorType.DENTIST.value,
+            "speciality": DoctorSpeciality.DENTIST.value,
             "first_name": "Test name",
             "last_name": "Test last name",
         }
@@ -27,7 +27,7 @@ def test_create_doctor(client):
     data = {
         "email": "testemail@email.com",
         "password": "testing",
-        "doctor_type": DoctorType.DENTIST.value,
+        "speciality": DoctorSpeciality.DENTIST.value,
         "first_name": "Test name",
         "last_name": "Test last name",
     }
@@ -35,7 +35,7 @@ def test_create_doctor(client):
     print(response.json())
     assert response.status_code == 200
     assert response.json()["first_name"] == "Test name"
-    assert response.json()["doctor_type"] == DoctorType.DENTIST.value
+    assert response.json()["speciality"] == DoctorSpeciality.DENTIST.value
     assert response.json()["id"] is not None
     assert response.json()["user_id"] is not None
 
@@ -44,7 +44,7 @@ def test_adding_same_doctor_twice(client):
     user = {
         "email": "testemail@email.com",
         "password": "testing",
-        "doctor_type": DoctorType.DENTIST.value,
+        "speciality": DoctorSpeciality.DENTIST.value,
         "first_name": "Test name",
         "last_name": "Test last name",
     }

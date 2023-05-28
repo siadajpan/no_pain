@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette import status
 
-from backend.db.models.doctors import DoctorType
+from backend.db.models.doctors import DoctorSpeciality
 from backend.db.repository.doctors import (
     create_new_doctor,
     get_doctor,
@@ -39,7 +39,7 @@ async def doctor_details(
 @router.get("/register/")
 def register_form(request: Request):
     return templates.TemplateResponse(
-        "doctors/register.html", {"request": request, "doctor_speciality": DoctorType}
+        "doctors/register.html", {"request": request, "doctor_speciality": DoctorSpeciality}
     )
 
 
@@ -53,7 +53,7 @@ async def register(request: Request, db: Session = Depends(get_db)):
             last_name=form.last_name,
             email=form.email,
             password=form.password,
-            doctor_type=DoctorType.DENTIST,  # TODO fix this to pass real type
+            speciality=DoctorSpeciality.DENTIST,  # TODO fix this to pass real type
         )
         try:
             create_new_doctor(doctor=new_doctor, db=db)

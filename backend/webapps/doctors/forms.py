@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from fastapi import Request
 
-from backend.db.models.doctors import DoctorType
+from backend.db.models.doctors import DoctorSpeciality
 
 
 class DoctorCreateForm:
@@ -11,7 +11,7 @@ class DoctorCreateForm:
         self.errors: List = []
         self.first_name: Optional[str] = None
         self.last_name: Optional[str] = None
-        self.doctor_type: Optional[DoctorType] = None
+        self.speciality: Optional[DoctorSpeciality] = None
         self.email: Optional[str] = None
         self.password: Optional[str] = None
         self.repeat_password: Optional[str] = None
@@ -21,7 +21,7 @@ class DoctorCreateForm:
         self.first_name = form.get("first_name")
         self.last_name = form.get("last_name")
         self.email = form.get("email")
-        self.doctor_type = form.get("doctor_type")
+        self.speciality = form.get("speciality")
         self.password = form.get("password")
         self.repeat_password = form.get("repeat_password")
 
