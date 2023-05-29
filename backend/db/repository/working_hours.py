@@ -5,14 +5,14 @@ from backend.schemas.working_hours import WorkingHoursCreate
 
 
 def create_new_working_hours(
-    working_hours: WorkingHoursCreate, db: Session, doctor: int
+    working_hours: WorkingHoursCreate, db: Session, doctor_id: int
 ):
     # TODO How to validate start and end time?
     # WorkingHoursCreate.validate_start_less_than_end(
     #     working_hours.start_time, working_hours.end_time
     # )
     new_working_hours = WorkingHours(
-        doctor_id=doctor,
+        doctor_id=doctor_id,
         **working_hours.dict(),
     )
     db.add(new_working_hours)

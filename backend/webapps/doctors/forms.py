@@ -32,6 +32,8 @@ class DoctorCreateForm:
             self.errors.append("Last name is required")
         if not self.password or len(self.password) < 4:
             self.errors.append("Password needs to be at least 4 characters")
+        if not self.email:
+            self.errors.append("Wrong email address")
         if self.password != self.repeat_password:
             self.errors.append("Passwords don't match")
         return len(self.errors) == 0

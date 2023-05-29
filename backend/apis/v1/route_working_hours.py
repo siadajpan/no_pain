@@ -28,7 +28,7 @@ def create_working_hours(
     current_user: User = Depends(get_current_user_from_token),
 ):
     new_working_hours = create_new_working_hours(
-        working_hours=working_hours, db=db, doctor=current_user.id
+        working_hours=working_hours, db=db, doctor_id=current_user.id
     )
 
     return new_working_hours

@@ -31,5 +31,9 @@
         <h3 class="mt-4 p-5 display-8">No working hours specified yet </h3>
         {% endif %}
     </div>
+    {% if editable %}
+        <button type="button" class="btn btn-primary">Add working hours</button>
+    {% endif %}
+
 </div>
 {% endblock %}
