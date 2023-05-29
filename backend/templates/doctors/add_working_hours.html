@@ -1,0 +1,25 @@
+{% extends "shared/base.html" %}
+{% block title %}
+    <title>Working hours</title>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h5 class="mt-4 p-5 display-5">Select practice</h5>
+    <table class="table table-striped table-hover">
+        <tbody>
+        {% for practice in practices %}
+        <tr>
+            <td>
+                {% with practice=practice %}
+                    {% include "components/practice_list_card_selectable.html" %}
+                {% endwith %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

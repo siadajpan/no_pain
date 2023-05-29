@@ -1,8 +1,10 @@
 from typing import List, Optional
 
 from fastapi import Request
+from pydantic.schema import datetime
 
 from backend.db.models.doctors import DoctorSpeciality
+from schemas.types import DayOfWeek
 
 
 class DoctorCreateForm:
@@ -37,3 +39,20 @@ class DoctorCreateForm:
         if self.password != self.repeat_password:
             self.errors.append("Passwords don't match")
         return len(self.errors) == 0
+
+
+class WorkingHoursCreateForm:
+    def __init__(self, request: Request):
+        self.request = request
+        self.day_of_week: Optional[DayOfWeek] = None
+        self.start_time: Optional[str] = None
+        self.end_time: Optional[str] = None
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.day_of_week = form.get("day_of_week")
+        self.start_time = form.get("start_time")
+        self.end_time = form.get("end_time")
+
+    async def is_valid(self):
+        return True
