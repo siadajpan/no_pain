@@ -10,15 +10,15 @@ from backend.apis.utils import OAuth2PasswordBearerWithCookie
 from backend.core.config import settings
 from backend.core.hashing import Hasher
 from backend.core.security import create_access_token
-from backend.db.repository.login import get_user
 from backend.db.session import get_db
 from backend.schemas.tokens import Token
+from db.repository.users import get_user_by_email
 
 router = APIRouter()
 
 
 def authenticate_user(email: str, password: str, db: Session):
-    user = get_user(email=email, db=db)
+    user = get_user_by_email(email=email, db=db)
     if not user or not Hasher.verify_password(password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -26,13 +26,13 @@ def authenticate_user(email: str, password: str, db: Session):
         )
     return user
 
+
 @router.post("/token", response_model=Token)
 def login_for_access_token(
         response: Response,
         form_data: OAuth2PasswordRequestForm = Depends(),
         db: Session = Depends(get_db)
 ):
-
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(
@@ -52,7 +52,7 @@ oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/login/token")
 
 
 def get_current_user_from_token(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+        token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -67,7 +67,7 @@ def get_current_user_from_token(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = get_user(email=email, db=db)
+    user = get_user_by_email(email=email, db=db)
     if user is None:
         raise credentials_exception
     return user

@@ -38,3 +38,11 @@ def test_adding_same_user_twice(client):
 
     with pytest.raises(IntegrityError):
         client.post(url="/users/create", content=json.dumps(user2))
+
+
+def test_get_user(client):
+    users = create_users(client, 1)
+    email = users[0]["email"]
+    response = client.get(url=f"/users/get/{email}")
+    assert response.status_code == 200
+    assert response.json()["email"] == email

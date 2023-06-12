@@ -4,6 +4,7 @@ import pytest
 from sqlalchemy.exc import IntegrityError
 
 from backend.db.models.speciality import DoctorSpeciality
+from core.config import settings
 
 
 def create_test_doctors(client, amount=1):
@@ -11,7 +12,7 @@ def create_test_doctors(client, amount=1):
     for i in range(amount):
         data = {
             "email": f"testemail{i}@email.com",
-            "password": "testing",
+            "password": settings.TEST_USER_PASSWORD,
             "speciality": DoctorSpeciality.DENTIST.value,
             "first_name": "Test name",
             "last_name": "Test last name",
@@ -53,8 +54,7 @@ def test_adding_same_doctor_twice(client):
     assert response.json()["first_name"] == "Test name"
     user2 = user.copy()
     with pytest.raises(IntegrityError):
-        response = client.post(url="/doctors/create", content=json.dumps(user2))
-    # assert response.status_code == 404
+        client.post(url="/doctors/create", content=json.dumps(user2))
 
 
 def test_list_doctors(client):

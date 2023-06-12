@@ -11,7 +11,7 @@ from backend.apis.base import api_router
 from backend.core.config import settings
 from backend.db.base_class import Base
 from backend.db.session import get_db
-from backend.tests.utils.users import authentication_token_from_email
+from backend.tests.utils.users import login_test_user
 
 
 def start_application():
@@ -71,7 +71,7 @@ def client(
 
 
 @pytest.fixture(scope="function")
-def normal_user_token_headers(client: TestClient, db_session: Session):
-    return authentication_token_from_email(
-        client=client, email=settings.TEST_USER_EMAIL, db=db_session
+def user_logged_in(client: TestClient, db_session: Session):
+    login_test_user(
+        client=client, email=settings.TEST_USER_EMAIL
     )
