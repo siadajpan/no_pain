@@ -1,10 +1,12 @@
-from typing import List, Optional
+import dataclasses
+from typing import List, Optional, Type
 
 from fastapi import Request
-from pydantic.schema import datetime
+from starlette.datastructures import FormData
 
 from backend.db.models.doctors import DoctorSpeciality
-from schemas.types import DayOfWeek
+from schemas.working_hours import WorkingHoursCreate
+from webapps.utils import types
 
 
 class DoctorCreateForm:
@@ -41,18 +43,41 @@ class DoctorCreateForm:
         return len(self.errors) == 0
 
 
+class DayWorkingHours:
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
+    def __str__(self):
+        return f"{self.start} - {self.end}"
+
+
 class WorkingHoursCreateForm:
     def __init__(self, request: Request):
         self.request = request
-        self.day_of_week: Optional[DayOfWeek] = None
-        self.start_time: Optional[str] = None
-        self.end_time: Optional[str] = None
+        self.working_hours: Optional[List[WorkingHoursCreate]] = []
 
-    async def load_data(self):
+    def get_working_data_day(self, form: FormData, day: str):
+        start = form.get(f"{day}_start")
+        end = form.get(f"{day}_end")
+        if start and end:
+            return {
+                "day_of_week": day,
+                "start_time": start,
+                "end_time": end,
+            }
+
+        return None
+
+    async def load_data(self, practice_id):
         form = await self.request.form()
-        self.day_of_week = form.get("day_of_week")
-        self.start_time = form.get("start_time")
-        self.end_time = form.get("end_time")
+
+        for day in types.DAYS:
+            working_hours = self.get_working_data_day(form, day)
+            if working_hours:
+                working_hours["practice_id"] = practice_id
+                working_hours_create = WorkingHoursCreate(**working_hours)
+                self.working_hours.append(working_hours_create)
 
     async def is_valid(self):
         return True

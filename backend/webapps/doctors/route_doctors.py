@@ -1,4 +1,5 @@
 import json
+from typing import List
 
 from fastapi import APIRouter, Depends, Request, responses
 from fastapi.security.utils import get_authorization_scheme_param
@@ -9,29 +10,50 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from apis.v1.route_login import get_current_user_from_token, oauth2_scheme
-from apis.v1.route_practice import read_practices
 from backend.db.models.doctors import DoctorSpeciality
 from backend.db.repository.doctors import (
     create_new_doctor,
     get_doctor,
-    get_doctors_working_hours_and_practices,
+    get_doctors_working_hours_and_practices, list_doctors_as_show_doctor,
 )
 from backend.db.session import get_db
-from backend.schemas.doctors import DoctorCreate
+from backend.schemas.doctors import DoctorCreate, ShowDoctor
 from backend.webapps.doctors.forms import DoctorCreateForm, WorkingHoursCreateForm
 from backend.db.models.users import User
+from db.repository.practices import retrieve_practice
+from db.repository.working_hours import create_new_working_hours
+from webapps.practices.route_practices import read_practices
 
 templates = Jinja2Templates(directory="templates")
 router = APIRouter(include_in_schema=False)
 
 
+@router.post("/create", response_model=ShowDoctor)
+def create_doctor(doctor: DoctorCreate, db: Session = Depends(get_db)):
+    email = doctor.email
+    new_doctor = create_new_doctor(doctor=doctor, db=db)
+    # Needed for ShowDoctor class
+    new_doctor.email = email
+
+    return new_doctor
+
+
+@router.get("/list", response_model=List[ShowDoctor])
+def list_doctors(db: Session = Depends(get_db)):
+    doctors = list_doctors_as_show_doctor(db)
+    # for doctor in doctors:
+    #     del doctor.hashed_password
+    return doctors
+
+
 @router.get("/details/{doctor_id}")
 async def doctor_details(
-    doctor_id: int, request: Request, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+        doctor_id: int, request: Request, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ):
     doctors_working_hours_practices = get_doctors_working_hours_and_practices(
         doctor_id=doctor_id, db=db
     )
+    print(doctors_working_hours_practices)
     doctor = get_doctor(doctor_id, db)
     current_user = get_current_user_from_token(token, db)
     editable: bool = current_user.id == doctor.user_id
@@ -92,26 +114,35 @@ def add_working_hours_form(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/add_working_hours/")
-async def add_working_hours(request: Request, db: Session = Depends(get_db)):
+@router.get("/add_working_hours_practice/{practice_id}")
+def register_form(practice_id, request: Request, db: Session = Depends(get_db)):
+    print("retrieving practice")
+    practice = retrieve_practice(practice_id=practice_id, db=db)
+    return templates.TemplateResponse(
+        "doctors/add_working_hours_practice.html", {"request": request, "practice": practice}
+    )
+
+
+@router.post("/add_working_hours_practice/{practice_id}")
+async def add_working_hours(practice_id, request: Request, db: Session = Depends(get_db)):
     print("adding working hours out form")
     form = WorkingHoursCreateForm(request)
-    await form.load_data()
+    await form.load_data(practice_id)
     token = request.cookies.get("access_token")
     scheme, param = get_authorization_scheme_param(
-                token
-            )  # scheme will hold "Bearer" and param will hold actual token value
+        token
+    )  # scheme will hold "Bearer" and param will hold actual token value
     current_user: User = get_current_user_from_token(token=param, db=db)
 
     if await form.is_valid():
-        print(form.day_of_week, form.start_time, form.end_time)
+        # print("form valid", form.working_hours["monday"].start, form.working_hours["monday"].end)
+
+        for working_hours in form.working_hours:
+            working_hours.practice_id = practice_id
+            create_new_working_hours(
+                working_hours=working_hours, db=db, doctor_id=current_user.id
+            )
         return responses.RedirectResponse(
             "/?msg=Successfully added working hours", status_code=status.HTTP_302_FOUND
         )  # default is post request, to use get request added status code 302
     return templates.TemplateResponse("doctors/add_working_hours.html", form.__dict__)
-
-    #     for working_hours in form.working_hours:
-    #         create_new_working_hours(
-    #             working_hours=working_hours, db=db, doctor_id=current_user.id
-    #         )
-

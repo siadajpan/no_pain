@@ -1,3 +1,6 @@
+from collections import defaultdict
+from typing import Dict, List
+
 from sqlalchemy.orm import Session
 
 from backend.db.models.doctors import Doctor
@@ -46,12 +49,17 @@ def list_doctors_as_show_doctor(db):
     return list(zip(*doctors_and_users))[0]
 
 
-def get_doctors_working_hours_and_practices(doctor_id: int, db, group_by_practice=True):
+def get_doctors_working_hours_and_practices(doctor_id: int, db)\
+        -> Dict[Practice, List[WorkingHours]]:
     doctors_working_hours_practices = (
         db.query(Practice, WorkingHours)
         .join(WorkingHours)
         .filter(WorkingHours.doctor_id == doctor_id)
         .all()
     )
+    practice_groups = defaultdict(list)
+    for practice, working_hours in doctors_working_hours_practices:
+        practice_groups[practice].append(working_hours)
 
-    return doctors_working_hours_practices
+    return practice_groups
+
