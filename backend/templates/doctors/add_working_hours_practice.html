@@ -8,13 +8,13 @@
     <div class="container">
         <h5 class="mt-4 p-5 display-5">Add working hours</h5>
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-auto">
                 <h2>Practice Details</h2>
                 {% with practice=practice %}
                     {% include "components/practice_list_card.html" %}
                 {% endwith %}
             </div>
-            <div class="col-md-7">
+            <div class="col">
                 <h2>Working Hours</h2>
                 <form method="POST">
                     <div class="form-group">

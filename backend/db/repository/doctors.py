@@ -78,3 +78,12 @@ def retrieve_practice_doctors_and_working_hours(practice_id: int, db: Session) \
         doctors_groups[doctor].append(working_hours)
 
     return doctors_groups
+
+
+def get_doctor_by_user_id(user_id: int, db: Session) -> Doctor:
+    doctor = (
+        db.query(Doctor)
+        .where(Doctor.user_id == user_id)
+        .one()
+    )
+    return doctor

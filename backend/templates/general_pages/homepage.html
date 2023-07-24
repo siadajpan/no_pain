@@ -10,21 +10,15 @@
     {% include "components/alerts.html" %}
   {% endwith %}
 
-<div class="container">
+<div class="container mt-4">
     <h1 class="mt-4 p-5 display-5">Find your doctor</h1>
-    <div class="row">
+    <div class="row row-cols-auto">
         {% for doctor in doctors %}
-
-        <div class="col-lg-4 col-md-3 col-sm-10 mr-auto">
+            <div class="col-auto p-2">
             {% with doctor=doctor, working_hours=working_hours%}
                 {% include "components/doctor_list_card.html" %}
             {% endwith %}
-
-            {% if loop.index %3 %}
-                </div>
-            {% else %}
-                </div></div><br><div class="row">
-            {% endif %}
+            </div>
         {% endfor %}
     </div>
 </div>

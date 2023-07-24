@@ -5,21 +5,17 @@
 
 
 {% block content %}
-<div class="container">
-    <h5 class="mt-4 p-5 display-5">Select practice</h5>
-    <table class="table table-striped table-hover">
-        <tbody>
-        {% for practice in practices %}
-        <tr>
-            <td>
+    <div class="container mt-4">
+        <h5 class="mt-4 p-5 display-5">Select practice</h5>
+        <div class="row row-cols-auto">
+            {% for practice in practices %}
+                <div class="col-auto p-2">
                 {% with practice=practice %}
                     {% include "components/practice_list_card_selectable.html" %}
                 {% endwith %}
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
 {% endblock %}

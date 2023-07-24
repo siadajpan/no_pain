@@ -14,7 +14,7 @@ from backend.db.models.doctors import DoctorSpeciality
 from backend.db.repository.doctors import (
     create_new_doctor,
     get_doctor,
-    get_doctors_working_hours_and_practices, list_doctors_as_show_doctor,
+    get_doctors_working_hours_and_practices, list_doctors_as_show_doctor, get_doctor_by_user_id,
 )
 from backend.db.session import get_db
 from backend.schemas.doctors import DoctorCreate, ShowDoctor
@@ -135,6 +135,7 @@ async def add_working_hours(practice_id, request: Request, db: Session = Depends
         token
     )  # scheme will hold "Bearer" and param will hold actual token value
     current_user: User = get_current_user_from_token(token=param, db=db)
+    current_doctor = get_doctor_by_user_id(current_user.id, db)
 
     if await form.is_valid():
         # print("form valid", form.working_hours["monday"].start, form.working_hours["monday"].end)
@@ -142,7 +143,7 @@ async def add_working_hours(practice_id, request: Request, db: Session = Depends
         for working_hours in form.working_hours:
             working_hours.practice_id = practice_id
             create_new_working_hours(
-                working_hours=working_hours, db=db, doctor_id=current_user.id
+                working_hours=working_hours, db=db, doctor_id=current_doctor.id
             )
         return responses.RedirectResponse(
             "/?msg=Successfully added working hours", status_code=status.HTTP_302_FOUND
