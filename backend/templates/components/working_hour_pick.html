@@ -2,9 +2,9 @@
     <div class="row">
 
         <div class="col-md-3">
-            {{ name }}:
+            <h6>{{ name }}:</h6>
         </div>
-        <div class="col-md-5">
+        <div class="col">
             <input id={{ name }}_start name={{ name }}_start width="120" placeholder="From"/>
             <script>
                 $('#{{ name }}_start').timepicker({
@@ -12,7 +12,7 @@
                 });
             </script>
         </div>
-        <div class="col-md-4">
+        <div class="col">
             <input id={{ name }}_end name={{ name }}_end width="120" placeholder="To"/>
             <script>
                 $('#{{ name }}_end').timepicker({

@@ -23,6 +23,7 @@ async def login(request: Request):
         },
     )
 
+
 @router.post("/login/")
 async def login(request: Request, db: Session = Depends(get_db)):
     form = LoginForm(request)
@@ -39,3 +40,12 @@ async def login(request: Request, db: Session = Depends(get_db)):
             form.__dict__.get("errors").append("Incorrect Email or password")
             return templates.TemplateResponse("auth/login.html", form.__dict__)
     return templates.TemplateResponse("auth/login.html", form.__dict__)
+
+
+@router.get("/logout/")
+async def login(request: Request):
+    response = responses.RedirectResponse(
+        "/?msg=Successfully logged out", status_code=status.HTTP_302_FOUND)
+    response.delete_cookie("access_token")
+
+    return response
