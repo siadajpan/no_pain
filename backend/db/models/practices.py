@@ -13,4 +13,5 @@ class Practice(Base):
     city = Column(String, nullable=False)
     address = Column(String, nullable=False)
     working_hours = relationship("WorkingHours", back_populates="practice")
+    phone_number = Column(String, nullable=False)
     descriptor = Column(String, unique=True, nullable=False)

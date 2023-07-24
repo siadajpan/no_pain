@@ -48,7 +48,7 @@ def login_for_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/login/token")
+oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/login/token", auto_error=False)
 
 
 def get_current_user_from_token(

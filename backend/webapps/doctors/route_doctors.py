@@ -1,7 +1,7 @@
 import json
 from typing import List
 
-from fastapi import APIRouter, Depends, Request, responses
+from fastapi import APIRouter, Depends, Request, responses, HTTPException
 from fastapi.security.utils import get_authorization_scheme_param
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
@@ -53,10 +53,12 @@ async def doctor_details(
     doctors_working_hours_practices = get_doctors_working_hours_and_practices(
         doctor_id=doctor_id, db=db
     )
-    print(doctors_working_hours_practices)
     doctor = get_doctor(doctor_id, db)
-    current_user = get_current_user_from_token(token, db)
-    editable: bool = current_user.id == doctor.user_id
+    if token:
+        current_user = get_current_user_from_token(token, db)
+        editable: bool = current_user.id == doctor.user_id
+    else:
+        editable = False
 
     return templates.TemplateResponse(
         "doctors/details.html",

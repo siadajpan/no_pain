@@ -58,3 +58,10 @@ def get_working_hours_by_doctor_id(doctor_id: int, db: Session):
         db.query(WorkingHours).filter(WorkingHours.doctor_id == doctor_id).all()
     )
     return doctors_working_hours
+
+
+def get_working_hours_by_practice_id(practice_id: int, db: Session):
+    practice_working_hours = (
+        db.query(WorkingHours).filter(WorkingHours.practice_id == practice_id).all()
+    )
+    return practice_working_hours

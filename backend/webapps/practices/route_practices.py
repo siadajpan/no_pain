@@ -10,6 +10,7 @@ from backend.db.repository.practices import create_new_practice, retrieve_practi
 from backend.db.session import get_db
 from backend.schemas.practices import PracticeCreate, PracticeShow
 from backend.webapps.practices.forms import PracticeCreateForm
+from db.repository.doctors import retrieve_practice_doctors_and_working_hours
 
 templates = Jinja2Templates(directory="templates")
 router = APIRouter(include_in_schema=False)
@@ -41,21 +42,20 @@ def read_practices(db: Session = Depends(get_db)):
 
 @router.get("/details/{practice_id}")
 async def practice_details(
-        doctor_id: int, request: Request, db: Session = Depends(get_db)
+        practice_id, request: Request, db: Session = Depends(get_db)
 ):
-    pass
-    # doctors_working_hours_practices = get_doctors_working_hours_and_practices(
-    #     doctor_id=doctor_id, db=db
-    # )
-    # practice = get_practice(doctor_id, db)
-    # return templates.TemplateResponse(
-    #     "doctors/details.html",
-    #     {
-    #         "request": request,
-    #         "doctor": practice,
-    #         "working_hours_practices": doctors_working_hours_practices,
-    #     },
-    # )
+    # retrieve all doctors working here
+    practice_doctors = retrieve_practice_doctors_and_working_hours(practice_id=practice_id, db=db)
+    print("practice_doctors", practice_doctors)
+    practice = retrieve_practice(practice_id, db)
+    return templates.TemplateResponse(
+        "practices/details.html",
+        {
+            "request": request,
+            "practice": practice,
+            "doctors_working_hours": practice_doctors,
+        },
+    )
 
 
 @router.get("/register/")

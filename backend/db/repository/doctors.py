@@ -1,6 +1,7 @@
 from collections import defaultdict
-from typing import Dict, List
+from typing import Dict, List, Type
 
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from backend.db.models.doctors import Doctor
@@ -51,15 +52,29 @@ def list_doctors_as_show_doctor(db):
 
 def get_doctors_working_hours_and_practices(doctor_id: int, db)\
         -> Dict[Practice, List[WorkingHours]]:
-    doctors_working_hours_practices = (
+    practices_working_hours = (
         db.query(Practice, WorkingHours)
         .join(WorkingHours)
         .filter(WorkingHours.doctor_id == doctor_id)
         .all()
     )
     practice_groups = defaultdict(list)
-    for practice, working_hours in doctors_working_hours_practices:
+    for practice, working_hours in practices_working_hours:
         practice_groups[practice].append(working_hours)
 
     return practice_groups
 
+
+def retrieve_practice_doctors_and_working_hours(practice_id: int, db: Session) \
+        -> Dict[Doctor, List[WorkingHours]]:
+    doctors_working_hours = (
+        db.query(Doctor, WorkingHours)
+        .join(WorkingHours)
+        .filter(WorkingHours.practice_id == practice_id)
+        .all()
+    )
+    doctors_groups = defaultdict(list)
+    for doctor, working_hours in doctors_working_hours:
+        doctors_groups[doctor].append(working_hours)
+
+    return doctors_groups
