@@ -110,7 +110,6 @@ async def register(request: Request, db: Session = Depends(get_db)):
 @router.get("/add_working_hours/")
 def add_working_hours_form(request: Request, db: Session = Depends(get_db)):
     practices = read_practices(db)
-    print(practices)
     return templates.TemplateResponse(
         "doctors/add_working_hours.html", {"request": request, "practices": practices}
     )
@@ -127,7 +126,6 @@ def register_form(practice_id, request: Request, db: Session = Depends(get_db)):
 
 @router.post("/add_working_hours_practice/{practice_id}")
 async def add_working_hours(practice_id, request: Request, db: Session = Depends(get_db)):
-    print("adding working hours out form")
     form = WorkingHoursCreateForm(request)
     await form.load_data(practice_id)
     token = request.cookies.get("access_token")

@@ -11,6 +11,7 @@ from backend.db.models.working_hours import WorkingHours
 from backend.db.repository.users import create_new_user
 from backend.schemas.doctors import DoctorCreate
 from backend.schemas.users import UserCreate
+from webapps.utils.types import Day, DAYS
 
 
 def create_new_doctor(doctor: DoctorCreate, db: Session):
@@ -50,6 +51,12 @@ def list_doctors_as_show_doctor(db):
     return list(zip(*doctors_and_users))[0]
 
 
+# def sort_working_hours(working_hours_list: List[WorkingHours]) -> List[WorkingHours]:
+#     for day in DAYS:
+#
+#     return working_hours_list
+
+
 def get_doctors_working_hours_and_practices(doctor_id: int, db)\
         -> Dict[Practice, List[WorkingHours]]:
     practices_working_hours = (
@@ -61,6 +68,9 @@ def get_doctors_working_hours_and_practices(doctor_id: int, db)\
     practice_groups = defaultdict(list)
     for practice, working_hours in practices_working_hours:
         practice_groups[practice].append(working_hours)
+
+    # for practice, working_hours in practice_groups.items():
+    #     practice_groups[practice] = sort_working_hours(working_hours)
 
     return practice_groups
 

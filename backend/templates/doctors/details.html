@@ -12,20 +12,9 @@
                 <table class="table table-striped table-hover">
                     <tbody>
                     {% for practice, working_hours in working_hours_practices.items() %}
-                        <div class="row">
-                            <div class="col md-4">
-                                {% with practice=practice %}
-                                    {% include "components/practice_list_card.html" %}
-                                {% endwith %}
-                            </div>
-                            <div class="col md-8">
-                                {% for working_hour in working_hours %}
-                                    {% with working_hours=working_hour %}
-                                        {% include "components/working_hours.html" %}
-                                    {% endwith %}
-                                {% endfor %}
-                            </div>
-                        </div>
+                        {% with practice=practice, working_hours=working_hours %}
+                            {% include "components/practice_working_hours.html" %}
+                        {% endwith %}
                     {% endfor %}
                     </tbody>
                 </table>

@@ -1,13 +1,8 @@
 <div class="card shadow p-3 mb-2 bg-body rounded" style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">{{practice.name}}</h5>
-    <p class="card-text">
-      {{practice.address}}
-    </p>
-    <p>
-      {{ practice.postcode }} {{practice.city}}
-    </p>
-
-    <a href="/practices/details/{{practice.id}}" class="btn btn-primary">More details</a>
-  </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ practice.name }}</h5>
+        {% with practice=practice %}
+            {% include "components/practice_details.html" %}
+        {% endwith %}
+    </div>
 </div>
