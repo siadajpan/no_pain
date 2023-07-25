@@ -10,8 +10,8 @@
         <div class="row row-cols-auto">
             {% for practice in practices %}
                 <div class="col-auto p-2">
-                {% with practice=practice %}
-                    {% include "components/practice_list_card_selectable.html" %}
+                {% with practice=practice, selectable=selectable%}
+                    {% include "components/practice_list_card.html" %}
                 {% endwith %}
                 </div>
             {% endfor %}

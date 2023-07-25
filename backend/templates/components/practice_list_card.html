@@ -4,5 +4,10 @@
         {% with practice=practice %}
             {% include "components/practice_details.html" %}
         {% endwith %}
+    {% if selectable %}
+    <p></p>
+        <a href="/doctors/add_working_hours_practice/{{ practice.id }}" class="btn btn-primary" type="submit">Add
+            working hours</a>
+    {% endif %}
     </div>
 </div>

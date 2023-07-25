@@ -9,7 +9,7 @@
         <h5 class="mt-4 p-5 display-5">Add working hours</h5>
         <div class="row">
             <div class="col-auto">
-                {% with practice=practice %}
+                {% with practice=practice, selectable=False %}
                     {% include "components/practice_list_card.html" %}
                 {% endwith %}
             </div>
