@@ -9,19 +9,20 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette import status
 
-from apis.v1.route_login import get_current_user_from_token, oauth2_scheme
+from apis.v1.route_login import get_current_user_from_token, oauth2_scheme, get_current_user
 from backend.db.models.doctors import DoctorSpeciality
 from backend.db.repository.doctors import (
     create_new_doctor,
     get_doctor,
-    get_doctors_working_hours_and_practices, list_doctors_as_show_doctor, get_doctor_by_user_id,
+    get_doctors_working_hours_and_practices, list_doctors_as_show_doctor, get_doctor_by_user_id, get_current_doctor,
 )
 from backend.db.session import get_db
 from backend.schemas.doctors import DoctorCreate, ShowDoctor
 from backend.webapps.doctors.forms import DoctorCreateForm, WorkingHoursCreateForm
 from backend.db.models.users import User
 from db.repository.practices import retrieve_practice
-from db.repository.working_hours import create_new_working_hours
+from db.repository.working_hours import create_new_working_hours, get_working_hours_by_doctor_and_practice, \
+    working_hours_to_dict, delete_working_hours_by_id
 from webapps.practices.route_practices import read_practices
 
 templates = Jinja2Templates(directory="templates")
@@ -56,9 +57,9 @@ async def doctor_details(
     doctor = get_doctor(doctor_id, db)
     if token:
         current_user = get_current_user_from_token(token, db)
-        editable: bool = current_user.id == doctor.user_id
+        add_working_hours_visible: bool = current_user.id == doctor.user_id
     else:
-        editable = False
+        add_working_hours_visible = False
 
     return templates.TemplateResponse(
         "doctors/details.html",
@@ -66,7 +67,8 @@ async def doctor_details(
             "request": request,
             "doctor": doctor,
             "working_hours_practices": doctors_working_hours_practices,
-            "editable": editable
+            "add_working_hours": add_working_hours_visible,
+            "edit_working_hours": add_working_hours_visible,
         },
     )
 
@@ -116,11 +118,14 @@ def add_working_hours_form(request: Request, db: Session = Depends(get_db)):
 
 
 @router.get("/add_working_hours_practice/{practice_id}")
-def register_form(practice_id, request: Request, db: Session = Depends(get_db)):
-    print("retrieving practice")
+def add_working_hours_practice(practice_id, request: Request, db: Session = Depends(get_db)):
     practice = retrieve_practice(practice_id=practice_id, db=db)
+    doctor = get_current_doctor(request, db)
+    curr_working_hours = get_working_hours_by_doctor_and_practice(doctor.id, practice_id, db)
+    curr_working_hours_by_day = working_hours_to_dict(curr_working_hours)
     return templates.TemplateResponse(
-        "doctors/add_working_hours_practice.html", {"request": request, "practice": practice}
+        "doctors/add_working_hours_practice.html",
+        {"request": request, "practice": practice, "working_hours": curr_working_hours_by_day}
     )
 
 
@@ -128,15 +133,14 @@ def register_form(practice_id, request: Request, db: Session = Depends(get_db)):
 async def add_working_hours(practice_id, request: Request, db: Session = Depends(get_db)):
     form = WorkingHoursCreateForm(request)
     await form.load_data(practice_id)
-    token = request.cookies.get("access_token")
-    scheme, param = get_authorization_scheme_param(
-        token
-    )  # scheme will hold "Bearer" and param will hold actual token value
-    current_user: User = get_current_user_from_token(token=param, db=db)
+    current_user: User = get_current_user(request, db)
     current_doctor = get_doctor_by_user_id(current_user.id, db)
 
     if await form.is_valid():
-        # print("form valid", form.working_hours["monday"].start, form.working_hours["monday"].end)
+        curr_working_hours = get_working_hours_by_doctor_and_practice(doctor_id=current_doctor.id,
+                                                                      practice_id=practice_id, db=db)
+        for working_hours in curr_working_hours:
+            delete_working_hours_by_id(working_hours.id, db)
 
         for working_hours in form.working_hours:
             working_hours.practice_id = practice_id
@@ -144,6 +148,7 @@ async def add_working_hours(practice_id, request: Request, db: Session = Depends
                 working_hours=working_hours, db=db, doctor_id=current_doctor.id
             )
         return responses.RedirectResponse(
-            "/?msg=Successfully added working hours", status_code=status.HTTP_302_FOUND
+            url=f"/doctors/details/{current_doctor.id}/?msg=Successfully added working hours",
+            status_code=status.HTTP_302_FOUND
         )  # default is post request, to use get request added status code 302
     return templates.TemplateResponse("doctors/add_working_hours.html", form.__dict__)

@@ -12,7 +12,7 @@
                 <table class="table table-striped table-hover">
                     <tbody>
                     {% for practice, working_hours in working_hours_practices.items() %}
-                        {% with practice=practice, working_hours=working_hours %}
+                        {% with practice=practice, working_hours=working_hours, edit_working_hours=edit_working_hours %}
                             {% include "components/practice_working_hours.html" %}
                         {% endwith %}
                     {% endfor %}
@@ -22,7 +22,7 @@
                 <h3 class="mt-4 p-5 display-8">No working hours specified yet </h3>
             {% endif %}
         </div>
-        {% if editable %}
+        {% if add_working_hours %}
             <a href="/doctors/add_working_hours" class="btn btn-primary">Add working hours</a>
         {% endif %}
 

@@ -5,7 +5,11 @@
             <h6>{{ name }}:</h6>
         </div>
         <div class="col-auto">
+            {% if working_hours[name]|length > 0 %}
+            <input id={{ name }}_start name={{ name }}_start width="120" value={{ working_hours[name][0].start_time }}>
+            {% else %}
             <input id={{ name }}_start name={{ name }}_start width="120" placeholder="From"/>
+            {% endif %}
             <script>
                 $('#{{ name }}_start').timepicker({
                     uiLibrary: 'bootstrap5'
@@ -13,7 +17,11 @@
             </script>
         </div>
         <div class="col">
-            <input id={{ name }}_end name={{ name }}_end width="120" placeholder="To"/>
+            {% if working_hours[name]|length > 0 %}
+            <input id={{ name }}_end name={{ name }}_end width="120" value={{ working_hours[name][0].end_time }} />
+            {% else %}
+                <input id={{ name }}_end name={{ name }}_end width="120" placeholder="To"/>
+            {% endif %}
             <script>
                 $('#{{ name }}_end').timepicker({
                     uiLibrary: 'bootstrap5'

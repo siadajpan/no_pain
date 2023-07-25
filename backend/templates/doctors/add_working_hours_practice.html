@@ -9,7 +9,7 @@
         <h5 class="mt-4 p-5 display-5">Add working hours</h5>
         <div class="row">
             <div class="col-auto">
-                {% with practice=practice, add_working_hours=False %}
+                {% with practice=practice %}
                     {% include "components/practice_list_card.html" %}
                 {% endwith %}
             </div>
@@ -17,26 +17,28 @@
                 <form method="POST">
                     <div class="form-group">
                         <div class="container p-3">
-                            {% with name="Monday" %}
-                                {% include "components/working_hour_pick.html" %}
-                            {% endwith %}
-                            {% with name="Tuesday" %}
-                                {% include "components/working_hour_pick.html" %}
-                            {% endwith %}
-                            {% with name="Wednesday" %}
-                                {% include "components/working_hour_pick.html" %}
-                            {% endwith %}
-                            {% with name="Thursday" %}
-                                {% include "components/working_hour_pick.html" %}
-                            {% endwith %}
-                            {% with name="Friday" %}
-                                {% include "components/working_hour_pick.html" %}
-                            {% endwith %}
-                            {% with name="Saturday" %}
-                                {% include "components/working_hour_pick.html" %}
-                            {% endwith %}
-                            {% with name="Sunday" %}
-                                {% include "components/working_hour_pick.html" %}
+                            {% with working_hours=working_hours %}
+                                {% with name="Monday" %}
+                                    {% include "components/working_hour_pick.html" %}
+                                {% endwith %}
+                                {% with name="Tuesday" %}
+                                    {% include "components/working_hour_pick.html" %}
+                                {% endwith %}
+                                {% with name="Wednesday" %}
+                                    {% include "components/working_hour_pick.html" %}
+                                {% endwith %}
+                                {% with name="Thursday" %}
+                                    {% include "components/working_hour_pick.html" %}
+                                {% endwith %}
+                                {% with name="Friday" %}
+                                    {% include "components/working_hour_pick.html" %}
+                                {% endwith %}
+                                {% with name="Saturday" %}
+                                    {% include "components/working_hour_pick.html" %}
+                                {% endwith %}
+                                {% with name="Sunday" %}
+                                    {% include "components/working_hour_pick.html" %}
+                                {% endwith %}
                             {% endwith %}
                         </div>
                     </div>

@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security.utils import get_authorization_scheme_param
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from starlette.responses import Response
@@ -68,3 +69,12 @@ def get_current_user_from_token(
     if user is None:
         raise credentials_exception
     return user
+
+
+def get_current_user(request, db):
+    token = request.cookies.get("access_token")
+    scheme, param = get_authorization_scheme_param(
+        token
+    )  # scheme will hold "Bearer" and param will hold actual token value
+    current_user = get_current_user_from_token(token=param, db=db)
+    return current_user

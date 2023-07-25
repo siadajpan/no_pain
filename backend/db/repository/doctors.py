@@ -3,7 +3,9 @@ from typing import Dict, List, Type
 
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from starlette.requests import Request
 
+from apis.v1.route_login import get_current_user
 from backend.db.models.doctors import Doctor
 from backend.db.models.practices import Practice
 from backend.db.models.users import User
@@ -11,7 +13,6 @@ from backend.db.models.working_hours import WorkingHours
 from backend.db.repository.users import create_new_user
 from backend.schemas.doctors import DoctorCreate
 from backend.schemas.users import UserCreate
-from webapps.utils.types import Day, DAYS
 
 
 def create_new_doctor(doctor: DoctorCreate, db: Session):
@@ -57,7 +58,7 @@ def list_doctors_as_show_doctor(db):
 #     return working_hours_list
 
 
-def get_doctors_working_hours_and_practices(doctor_id: int, db)\
+def get_doctors_working_hours_and_practices(doctor_id: int, db) \
         -> Dict[Practice, List[WorkingHours]]:
     practices_working_hours = (
         db.query(Practice, WorkingHours)
@@ -90,10 +91,16 @@ def retrieve_practice_doctors_and_working_hours(practice_id: int, db: Session) \
     return doctors_groups
 
 
-def get_doctor_by_user_id(user_id: int, db: Session) -> Doctor:
+def get_doctor_by_user_id(user_id: int, db: Session) -> Type[Doctor]:
     doctor = (
         db.query(Doctor)
         .where(Doctor.user_id == user_id)
         .one()
     )
     return doctor
+
+
+def get_current_doctor(request: Request, db: Session):
+    current_user = get_current_user(request, db)
+    current_doctor = get_doctor_by_user_id(user_id=current_user.id, db=db)
+    return current_doctor

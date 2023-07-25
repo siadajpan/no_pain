@@ -14,4 +14,7 @@
         Email: {{ practice.email }}
     </p>
 {% endif %}
-<a href="/practices/details/{{ practice.id }}" class="btn btn-secondary">More details</a>
+{% if dont_show_details_button %}
+{% else %}
+    <a href="/practices/details/{{ practice.id }}" class="btn btn-secondary">More details</a>
+{% endif %}
