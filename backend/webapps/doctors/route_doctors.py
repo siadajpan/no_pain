@@ -111,7 +111,7 @@ async def register(request: Request, db: Session = Depends(get_db)):
 def add_working_hours_form(request: Request, db: Session = Depends(get_db)):
     practices = read_practices(db)
     return templates.TemplateResponse(
-        "doctors/add_working_hours.html", {"request": request, "practices": practices, "selectable": True}
+        "doctors/add_working_hours.html", {"request": request, "practices": practices, "add_working_hours": True}
     )
 
 
