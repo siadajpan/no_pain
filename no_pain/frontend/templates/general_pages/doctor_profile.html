@@ -1,0 +1,42 @@
+{% extends "shared/base.html" %}
+
+{% block title %}
+<title>{{ doctor.user.first_name }} {{ doctor.user.last_name }} - No Pain</title>
+{% endblock %}
+{% block page_heading %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{ doctor.user.first_name }} {{ doctor.user.last_name }}</h1>
+            <h6 class="card-subtitle mb-2 text-muted">Doctor</h6>
+            
+            {% if doctor.specialization %}
+            <p class="card-text"><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+            {% endif %}
+            
+            <p class="card-text"><strong>Email:</strong> <a href="mailto:{{ doctor.user.email }}">{{ doctor.user.email }}</a></p>
+            
+            <hr>
+            
+            <h5>Practices</h5>
+            {% if doctor.practices %}
+            <ul class="list-group">
+                {% for practice in doctor.practices %}
+                <li class="list-group-item">
+                    {{ practice.name }} - {{ practice.city }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">Not associated with any practices yet.</p>
+            {% endif %}
+            
+            <div class="mt-3">
+                <a href="/" class="btn btn-outline-primary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

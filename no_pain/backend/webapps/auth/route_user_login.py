@@ -20,6 +20,7 @@ from no_pain.backend.db.repository.user import (
 )
 from no_pain.backend.db.session import get_db
 from no_pain.backend.schemas.user import UserCreate
+from no_pain.backend.db.models.user_role import UserRole
 from no_pain.backend.webapps.auth.forms import LoginForm
 from no_pain.backend.webapps.user.forms import ResetPasswordForm
 from no_pain.backend.webapps.auth.route_verify import send_verification_email
@@ -33,12 +34,12 @@ templates = Jinja2Templates(directory=TEMPLATES_DIR)
 router = APIRouter(include_in_schema=False)
 
 
-@router.get("/forgot-password/")
+@router.get("/forgot-password")
 async def forgot_password_form(request: Request):
     return templates.TemplateResponse("auth/forgot_password.html", {"request": request})
 
 
-@router.post("/forgot-password/")
+@router.post("/forgot-password")
 async def forgot_password(
     request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)
 ):
@@ -57,7 +58,7 @@ async def forgot_password(
         from no_pain.backend.webapps.auth.route_verify import send_reset_password_email
 
         background_tasks.add_task(
-            send_reset_password_email, user.email, user.nick, reset_token
+            send_reset_password_email, user.email, user.first_name, reset_token
         )
 
     # Always return success to prevent email enumeration
@@ -155,12 +156,12 @@ async def reset_password(request: Request, db: Session = Depends(get_db)):
         )
 
 
-@router.get("/register/")
+@router.get("/register")
 async def register_form(request: Request):
     return templates.TemplateResponse("auth/register.html", {"request": request})
 
 
-@router.post("/register/")
+@router.post("/register")
 async def register(
     request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)
 ):
@@ -169,8 +170,15 @@ async def register(
     try:
         new_user_data = UserCreate(
             email=form.get("email"),
-            nick=form.get("nick"),
+            first_name=form.get("first_name"),
+            last_name=form.get("last_name"),
             password=form.get("password"),
+            role=form.get("role", UserRole.PATIENT),
+            street_address=form.get("street_address"),
+            city=form.get("city"),
+            postcode=form.get("postcode"),
+            practice_name=form.get("practice_name"),
+            phone=form.get("phone"),
         )
 
         if not form.get("tos_agreement"):
@@ -179,12 +187,12 @@ async def register(
         new_user = create_new_user(user=new_user_data, db=db)
         verif_token = create_verification_token(new_user.id, db)
         background_tasks.add_task(
-            send_verification_email, new_user.email, new_user.nick, verif_token
+            send_verification_email, new_user.email, new_user.first_name, verif_token
         )
 
         response = templates.TemplateResponse(
             "auth/verify_notice.html",
-            {"request": request, "email": new_user.email, "nick": new_user.nick},
+            {"request": request, "email": new_user.email, "first_name": new_user.first_name},
         )
         response, access_token = add_new_access_token(response, new_user)
         return response
@@ -201,7 +209,7 @@ async def register(
     )
 
 
-@router.post("/login/")
+@router.post("/login")
 async def login(request: Request, db: Session = Depends(get_db)):
     form = await request.form()
     errors = []
@@ -223,7 +231,7 @@ async def login(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/login/")
+@router.get("/login")
 async def login(request: Request):
     return templates.TemplateResponse(
         "auth/login.html",
@@ -369,7 +377,14 @@ async def finish_google_registration(request: Request, db: Session = Depends(get
 
         # Create user
         random_password = secrets.token_urlsafe(16)
-        new_user_data = UserCreate(email=email, nick=nick, password=random_password)
+        # Split nick into first/last name
+        if " " in nick:
+            first_name, last_name = nick.split(" ", 1)
+        else:
+            first_name = nick
+            last_name = ""
+            
+        new_user_data = UserCreate(email=email, first_name=first_name, last_name=last_name, password=random_password)
         user = create_new_user(user=new_user_data, db=db)
         user.is_active = True
         db.commit()
@@ -397,7 +412,7 @@ async def finish_google_registration(request: Request, db: Session = Depends(get
         )
 
 
-@router.get("/logout/")
+@router.get("/logout")
 async def login(request: Request):
     response = responses.RedirectResponse(
         "/?msg=Successfully logged out", status_code=status.HTTP_302_FOUND

@@ -26,15 +26,15 @@ router = APIRouter(include_in_schema=False)
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 
-async def send_verification_email(email_to: str, nick: str, token: str):
+async def send_verification_email(email_to: str, first_name: str, token: str):
     verification_url = f"{settings.URL}/verify?token={token}"
     template = templates.get_template("email/verify_email.html")
-    html_content = template.render(nick=nick, link=verification_url)
+    html_content = template.render(first_name=first_name, link=verification_url)
 
     params = {
-        "from": "Over-Bet <noreply@over-bet.com>",
+        "from": "No Pain <noreply@no-pain.care>",
         "to": [email_to],
-        "subject": "Verify your Over-Bet account",
+        "subject": "Verify your No Pain account",
         "html": html_content,
     }
 
@@ -44,15 +44,15 @@ async def send_verification_email(email_to: str, nick: str, token: str):
         print(f"Failed to send email: {e}")
 
 
-async def send_reset_password_email(email_to: str, nick: str, token: str):
+async def send_reset_password_email(email_to: str, first_name: str, token: str):
     reset_url = f"{settings.URL}/reset-password?token={token}"
     template = templates.get_template("email/reset_password.html")
-    html_content = template.render(nick=nick, link=reset_url)
+    html_content = template.render(first_name=first_name, link=reset_url)
 
     params = {
-        "from": "Over-Bet <noreply@over-bet.com>",
+        "from": "No Pain <noreply@no-pain.care>",
         "to": [email_to],
-        "subject": "Reset your Over-Bet password",
+        "subject": "Reset your No Pain password",
         "html": html_content,
     }
 
@@ -138,9 +138,9 @@ async def resend_verification(
     new_token = create_verification_token(user.id, db)
 
     # 3. Send the email again
-    background_tasks.add_task(send_verification_email, user.email, user.nick, new_token)
+    background_tasks.add_task(send_verification_email, user.email, user.first_name, new_token)
 
     return templates.TemplateResponse(
         "auth/verify_notice.html",
-        {"request": request, "email": user.email, "nick": user.nick},
+        {"request": request, "email": user.email, "first_name": user.first_name},
     )

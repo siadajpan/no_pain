@@ -1,1 +1,0 @@
-DROP TABLE IF EXISTS add_on, buy_in, cash_out, chip, chip_structure, game, team, user_game_association, user_team_association;
