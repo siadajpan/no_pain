@@ -32,9 +32,9 @@ async def send_verification_email(email_to: str, nick: str, token: str):
     html_content = template.render(nick=nick, link=verification_url)
 
     params = {
-        "from": "Over-Bet <noreply@over-bet.com>",
+        "from": "No Pain <noreply@no-pain.com>",
         "to": [email_to],
-        "subject": "Verify your Over-Bet account",
+        "subject": "Verify your No Pain account",
         "html": html_content,
     }
 
@@ -50,9 +50,9 @@ async def send_reset_password_email(email_to: str, nick: str, token: str):
     html_content = template.render(nick=nick, link=reset_url)
 
     params = {
-        "from": "Over-Bet <noreply@over-bet.com>",
+        "from": "No Pain <noreply@no-pain.com>",
         "to": [email_to],
-        "subject": "Reset your Over-Bet password",
+        "subject": "Reset your No Pain password",
         "html": html_content,
     }
 
