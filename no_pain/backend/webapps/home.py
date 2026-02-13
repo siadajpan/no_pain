@@ -28,10 +28,37 @@ async def home(
 ):
     doctors = []
     practices = []
-    
+    my_doctors = []
+    my_practices = []
+    all_doctors_json = []
+    all_practices_json = []
+
     if user and user.role == UserRole.PATIENT:
         doctors = list_doctors(db)
         practices = list_practices(db)
+    elif user and user.role == UserRole.PRACTICE and user.practice:
+        # Eager load doctors for this practice
+        db.refresh(user.practice, ["doctors"])
+        my_doctors = user.practice.doctors
+        # Build JSON list of all doctors for search
+        all_docs = list_doctors(db)
+        existing_ids = {d.id for d in my_doctors}
+        all_doctors_json = [
+            {"id": d.id, "first_name": d.user.first_name, "last_name": d.user.last_name,
+             "specialization": d.specialization or "", "name": f"{d.user.first_name} {d.user.last_name}"}
+            for d in all_docs if d.id not in existing_ids
+        ]
+    elif user and user.role == UserRole.DOCTOR and user.doctor:
+        # Eager load practices for this doctor
+        db.refresh(user.doctor, ["practices"])
+        my_practices = user.doctor.practices
+        # Build JSON list of all practices for search
+        all_pracs = list_practices(db)
+        existing_ids = {p.id for p in my_practices}
+        all_practices_json = [
+            {"id": p.id, "name": p.name or "", "city": p.city or ""}
+            for p in all_pracs if p.id not in existing_ids
+        ]
 
     return templates.TemplateResponse(
         "general_pages/homepage.html",
@@ -41,6 +68,10 @@ async def home(
             "user": user,
             "doctors": doctors,
             "practices": practices,
+            "my_doctors": my_doctors,
+            "my_practices": my_practices,
+            "all_doctors_json": all_doctors_json,
+            "all_practices_json": all_practices_json,
             "UserRole": UserRole,
         },
     )

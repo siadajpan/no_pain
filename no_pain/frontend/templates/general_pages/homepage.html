@@ -87,22 +87,171 @@
     })
 </script>
 
-{% else %}
+{% elif user.role == UserRole.PRACTICE %}
+<!-- PRACTICE VIEW -->
+<div class="mt-3 mb-3">
+    <h2 class="display-6 mb-3">My Doctors</h2>
 
+    <div id="my-doctors-list">
+        {% if my_doctors|length > 0 %}
+        <div class="list-group list-group-flush mb-3">
+            {% for doctor in my_doctors %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ doctor.user.first_name }} {{ doctor.user.last_name }}</span>
+                {% if doctor.specialization %}
+                <span class="badge bg-secondary rounded-pill">{{ doctor.specialization }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            You don't have any doctors yet. Use the search below to add doctors to your practice.
+        </div>
+        {% endif %}
+    </div>
+
+    <hr>
+    <h5 class="mb-3">Add a Doctor</h5>
+    <div class="mb-3">
+        <input type="text" id="doctor-search-input" class="form-control" placeholder="Search doctors by name..." autocomplete="off">
+    </div>
+    <div id="doctor-search-results" class="list-group mb-3"></div>
+</div>
+
+<script>
+    const allDoctors = {{ all_doctors_json | tojson }};
+    const searchInput = document.getElementById('doctor-search-input');
+    const resultsDiv = document.getElementById('doctor-search-results');
+
+    searchInput.addEventListener('input', function() {
+        const q = this.value.toLowerCase().trim();
+        resultsDiv.innerHTML = '';
+        if (q.length < 1) return;
+
+        const matches = allDoctors.filter(d => d.name.toLowerCase().includes(q));
+        matches.slice(0, 10).forEach(doc => {
+            const item = document.createElement('div');
+            item.className = 'list-group-item d-flex justify-content-between align-items-center';
+            item.innerHTML = `
+                <span>${doc.first_name} ${doc.last_name}
+                    ${doc.specialization ? '<span class="badge bg-secondary rounded-pill ms-2">' + doc.specialization + '</span>' : ''}
+                </span>
+                <button class="btn btn-sm btn-outline-primary" onclick="addDoctor(${doc.id}, this)">Add</button>
+            `;
+            resultsDiv.appendChild(item);
+        });
+    });
+
+    function addDoctor(doctorId, btn) {
+        btn.disabled = true;
+        btn.textContent = 'Adding...';
+        fetch('/api/practice/add-doctor?doctor_id=' + doctorId, { method: 'POST' })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    btn.textContent = '✓ Added';
+                    btn.classList.replace('btn-outline-primary', 'btn-success');
+                    // Remove from local array so it won't appear again
+                    const idx = allDoctors.findIndex(d => d.id === doctorId);
+                    if (idx !== -1) allDoctors.splice(idx, 1);
+                    // Refresh after short delay
+                    setTimeout(() => location.reload(), 800);
+                } else {
+                    btn.textContent = data.error || 'Error';
+                    btn.classList.replace('btn-outline-primary', 'btn-danger');
+                }
+            })
+            .catch(() => {
+                btn.textContent = 'Error';
+                btn.classList.replace('btn-outline-primary', 'btn-danger');
+            });
+    }
+</script>
+
+{% elif user.role == UserRole.DOCTOR %}
+<!-- DOCTOR VIEW -->
+<div class="mt-3 mb-3">
+    <h2 class="display-6 mb-3">My Practices</h2>
+
+    <div id="my-practices-list">
+        {% if my_practices|length > 0 %}
+        <div class="list-group list-group-flush mb-3">
+            {% for practice in my_practices %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ practice.name }}</span>
+                <span class="text-muted small">{{ practice.city }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            You are not associated with any practice yet. Use the search below to join a practice.
+        </div>
+        {% endif %}
+    </div>
+
+    <hr>
+    <h5 class="mb-3">Join a Practice</h5>
+    <div class="mb-3">
+        <input type="text" id="practice-search-input" class="form-control" placeholder="Search practices by name..." autocomplete="off">
+    </div>
+    <div id="practice-search-results" class="list-group mb-3"></div>
+</div>
+
+<script>
+    const allPractices = {{ all_practices_json | tojson }};
+    const practiceSearchInput = document.getElementById('practice-search-input');
+    const practiceResultsDiv = document.getElementById('practice-search-results');
+
+    practiceSearchInput.addEventListener('input', function() {
+        const q = this.value.toLowerCase().trim();
+        practiceResultsDiv.innerHTML = '';
+        if (q.length < 1) return;
+
+        const matches = allPractices.filter(p => p.name.toLowerCase().includes(q));
+        matches.slice(0, 10).forEach(practice => {
+            const item = document.createElement('div');
+            item.className = 'list-group-item d-flex justify-content-between align-items-center';
+            item.innerHTML = `
+                <span>${practice.name}
+                    ${practice.city ? '<span class="text-muted small ms-2">' + practice.city + '</span>' : ''}
+                </span>
+                <button class="btn btn-sm btn-outline-primary" onclick="joinPractice(${practice.id}, this)">Join</button>
+            `;
+            practiceResultsDiv.appendChild(item);
+        });
+    });
+
+    function joinPractice(practiceId, btn) {
+        btn.disabled = true;
+        btn.textContent = 'Joining...';
+        fetch('/api/doctor/join-practice?practice_id=' + practiceId, { method: 'POST' })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    btn.textContent = '✓ Joined';
+                    btn.classList.replace('btn-outline-primary', 'btn-success');
+                    const idx = allPractices.findIndex(p => p.id === practiceId);
+                    if (idx !== -1) allPractices.splice(idx, 1);
+                    setTimeout(() => location.reload(), 800);
+                } else {
+                    btn.textContent = data.error || 'Error';
+                    btn.classList.replace('btn-outline-primary', 'btn-danger');
+                }
+            })
+            .catch(() => {
+                btn.textContent = 'Error';
+                btn.classList.replace('btn-outline-primary', 'btn-danger');
+            });
+    }
+</script>
+
+{% else %}
 <div class="row mt-5">
     <div class="col-md-8 mx-auto text-center">
         <h1 class="display-4">Welcome to No Pain</h1>
         <p class="lead">Manage your practice and patients efficiently.</p>
-        <hr class="my-4">
-        {% if user.role == UserRole.DOCTOR %}
-        <p>You are logged in as a <strong>Doctor</strong>.</p>
-        <a class="btn btn-primary btn-lg" href="/user/profile" role="button">View Profile</a>
-        {% elif user.role == UserRole.PRACTICE %}
-        <p>You are logged in as a <strong>Practice</strong>.</p>
-        <a class="btn btn-primary btn-lg" href="/user/profile" role="button">View Profile</a>
-        {% else %}
-        <p>Welcome back!</p>
-        {% endif %}
     </div>
 </div>
 
