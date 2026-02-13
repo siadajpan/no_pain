@@ -1,0 +1,7 @@
+/* Custom Blue Hover for Tables */
+.table-hover-custom tbody tr:hover,
+.list-group-hover .list-group-item.position-relative:hover {
+    background-color: #f2f6fc;
+    /* Solid light blue to ensure visibility */
+    cursor: pointer;
+}

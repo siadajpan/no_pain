@@ -5,7 +5,7 @@ uvicorn main:app --reload
 ```
 To view the page, open
 ```shell
-localhost:8000
+localhost:8001
 ```
 # Tests
 To run tests:

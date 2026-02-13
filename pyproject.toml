@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Doctor working hours"
 authors = ["karol <karol.misiarz@robovision.eu>"]
 readme = "README.md"
-packages = [{include = "backend"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
