@@ -10,6 +10,7 @@ from no_pain.backend.apis.base import api_router
 from no_pain.backend.core.config import STATIC_DIR, settings
 from no_pain.backend.db.base import Base
 from no_pain.backend.webapps.base import api_router as web_app_router
+from no_pain.backend.db.session import engine
 from sqlalchemy.exc import OperationalError
 
 

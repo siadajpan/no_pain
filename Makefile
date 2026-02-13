@@ -23,7 +23,7 @@ build:
 
 reset_db:
 	@echo "--- Resetting database ---"
-	poetry run python backend/db/tools/reset_db.py
+	poetry run python no_pain/backend/db/tools/reset_db.py
 
 reset_db_docker:
 	@echo "--- Resetting database (docker) ---"
