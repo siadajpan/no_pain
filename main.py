@@ -24,7 +24,21 @@ def configure_static(app):
 
 
 def create_tables():
-    Base.metadata.create_all(bind=engine)
+    """
+    Create database tables if they don't exist.
+    Handles the case where ENUMs/tables already exist in PostgreSQL.
+    """
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("Database tables created/verified successfully")
+    except Exception as e:
+        # If tables/ENUMs already exist, that's fine - just log and continue
+        if "already exists" in str(e).lower():
+            print(f"Database schema already exists, skipping creation: {e}")
+        else:
+            # Re-raise if it's a different error
+            print(f"Warning: Error during table creation: {e}")
+            raise
 
 
 
