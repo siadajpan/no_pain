@@ -146,29 +146,3 @@
 
 
 {% endblock %}
-{% block scripts %}
-<script>
-    setInterval(async () => {
-        const response = await fetch("/game/api/check_update");  // create this endpoint
-        if (response.ok) {
-            const data = await response.json();
-            if (data.new_game) {
-                location.reload();
-            }
-        }
-    }, 10000); // every 10 seconds
-
-    const triggerTabList = document.querySelectorAll('#pills-tab button')
-    triggerTabList.forEach(triggerEl => {
-        triggerEl.addEventListener('shown.bs.tab', event => {
-            if (event.target.id === 'pills-games-tab') {
-                document.getElementById('header-games').classList.remove('d-none');
-                document.getElementById('header-groups').classList.add('d-none');
-            } else {
-                document.getElementById('header-games').classList.add('d-none');
-                document.getElementById('header-groups').classList.remove('d-none');
-            }
-        })
-    })
-</script>
-{% endblock %}
