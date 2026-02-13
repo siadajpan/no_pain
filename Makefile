@@ -27,7 +27,7 @@ reset_db:
 
 reset_db_docker:
 	@echo "--- Resetting database (docker) ---"
-	sudo docker compose run --rm -e PYTHONPATH=. app poetry run python backend/db/tools/reset_db.py
+	sudo docker compose run --rm -e PYTHONPATH=. app poetry run python no_pain/backend/db/tools/reset_db.py
 
 start_local:
 	@echo "--- Starting local server ---"
