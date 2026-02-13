@@ -15,7 +15,6 @@ class UserCreate(BaseModel):
     street_address: Optional[str] = None
     city: Optional[str] = None
     postcode: Optional[str] = None
-    profile_picture: Optional[str] = None
     practice_name: Optional[str] = None
     phone: Optional[str] = None
 

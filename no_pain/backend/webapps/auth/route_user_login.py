@@ -177,7 +177,6 @@ async def register(
             street_address=form.get("street_address"),
             city=form.get("city"),
             postcode=form.get("postcode"),
-            profile_picture=form.get("profile_picture"),
             practice_name=form.get("practice_name"),
             phone=form.get("phone"),
         )

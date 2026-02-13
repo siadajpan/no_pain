@@ -38,7 +38,7 @@ def create_new_user(user: UserCreate, db: Session):
         patient = Patient(user_id=new_user.id)
         db.add(patient)
     elif user.role == UserRole.DOCTOR:
-        doctor = Doctor(user_id=new_user.id, profile_picture=user.profile_picture)
+        doctor = Doctor(user_id=new_user.id)
         db.add(doctor)
     elif user.role == UserRole.PRACTICE:
         practice = Practice(

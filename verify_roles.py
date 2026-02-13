@@ -3,7 +3,7 @@ import sys
 
 BASE_URL = "http://localhost:8001"
 
-def register_user(email, password, role, first_name=None, last_name=None, street_address=None, city=None, postcode=None, profile_picture=None, practice_name=None, phone=None):
+def register_user(email, password, role, first_name=None, last_name=None, street_address=None, city=None, postcode=None, practice_name=None, phone=None):
     url = f"{BASE_URL}/register/"
     data = {
         "email": email,
@@ -14,7 +14,6 @@ def register_user(email, password, role, first_name=None, last_name=None, street
         "street_address": street_address,
         "city": city,
         "postcode": postcode,
-        "profile_picture": profile_picture,
         "first_name": first_name,
         "last_name": last_name,
         "practice_name": practice_name,
@@ -43,7 +42,7 @@ def verify_db(email, role):
 if __name__ == "__main__":
     success = True
     success &= register_user("patient@example.com", "password", "patient", first_name="Pat", last_name="Patient")
-    success &= register_user("doctor@example.com", "password", "doctor", first_name="Doc", last_name="Doctor", profile_picture="http://pic.com/doc.jpg")
+    success &= register_user("doctor@example.com", "password", "doctor", first_name="Doc", last_name="Doctor")
     success &= register_user("practice@example.com", "password", "practice", practice_name="City Dental", street_address="123 Main St", city="London", postcode="EC1A 1BB", phone="555-1234")
 
     if not success:

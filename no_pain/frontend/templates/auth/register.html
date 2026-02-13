@@ -58,12 +58,7 @@
 
 
 
-  <div id="doctor_fields" class="mb-3 d-none">
-    <div class="form-floating">
-        <input type="text" class="form-control" name="profile_picture" placeholder="Profile Picture URL" />
-        <label>Profile Picture URL</label>
-    </div>
-  </div>
+
 
   <div id="practice_fields" class="mb-3 d-none">
     <div class="row mb-3">
@@ -101,23 +96,16 @@
   <script>
     function toggleFields() {
         const role = document.getElementById('role').value;
-        const doctorFields = document.getElementById('doctor_fields');
         const practiceFields = document.getElementById('practice_fields');
         const nameFields = document.getElementById('name_fields');
         const practiceNameField = document.getElementById('practice_name_field');
 
-        if (role === 'doctor') {
-            doctorFields.classList.remove('d-none');
-            practiceFields.classList.add('d-none');
-            nameFields.classList.remove('d-none');
-            practiceNameField.classList.add('d-none');
-        } else if (role === 'practice') {
-            doctorFields.classList.add('d-none');
+        if (role === 'practice') {
             practiceFields.classList.remove('d-none');
             nameFields.classList.add('d-none');
             practiceNameField.classList.remove('d-none');
         } else {
-            doctorFields.classList.add('d-none');
+            // Patient or Doctor -> show name fields, hide practice fields
             practiceFields.classList.add('d-none');
             nameFields.classList.remove('d-none');
             practiceNameField.classList.add('d-none');
