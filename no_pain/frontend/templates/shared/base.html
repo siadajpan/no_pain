@@ -28,6 +28,9 @@
     <title>No Pain</title>
     {% endblock %}
 
+    {# Define page_heading block but don't render it here — it's rendered via self.page_heading() below #}
+    {% set _unused_heading %}{% block page_heading %}{% endblock %}{% endset %}
+
     {% if user and not user.is_active %}
     <div class="alert alert-warning text-center" style="margin-bottom: 0;">
         <strong>Action Required:</strong> Please verify your email ({{ user.email }}).

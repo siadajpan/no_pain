@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="http://localhost:8001/static/images/fav_icon.svg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://localhost:8001/static/css/styles.css">
+    <link rel="stylesheet" href="http://localhost:8001/static/css/custom_table.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-light shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="http://localhost:8001/static/images/fav_icon.svg"
+                 alt="Logo" width="28" height="28" class="me-2">
+            <span class="fw">No Pain</span>
+        </a>
+
+        <ul class="navbar-nav flex-row">
+            
+                <li class="nav-item ms-3">
+                    <a class="nav-link text-dark d-flex align-items-center" href="/user/profile" title="Profile">
+                        <i class="bi bi-person-circle fs-5 me-1"></i> Profile
+                    </a>
+                </li>
+                <li class="nav-item ms-3">
+                    <a class="nav-link text-danger fw-semibold d-flex align-items-center" href="/logout">
+                        <i class="bi bi-box-arrow-right fs-5 me-1"></i> Logout
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+</nav>
+
+    
+    
+    
+    
+<title>No Pain</title>
+
+
+    
+    <div class="alert alert-warning text-center" style="margin-bottom: 0;">
+        <strong>Action Required:</strong> Please verify your email (patient@example.com).
+        Some features are restricted until you do.
+        <a href="/resend-verification" class="alert-link">Resend link</a>
+    </div>
+    
+
+    <div class="container">
+        
+        
+
+        
+        
+        
+
+        
+
+<!-- PATIENT VIEW -->
+<div class="d-flex flex-column flex-md-row-reverse justify-content-between align-items-stretch align-items-md-end gap-3 mt-3 mb-3 border-bottom-desktop">
+    <!-- TABS -->
+    <div class="d-flex gap-4 border-bottom-mobile mb-0" id="pills-tab" role="tablist">
+        <button
+            class="btn btn-link text-decoration-none px-0 rounded-0 shadow-none nav-custom-tab active"
+            id="pills-doctors-tab" data-bs-toggle="pill" data-bs-target="#pills-doctors" type="button" role="tab"
+            aria-controls="pills-doctors" aria-selected="true">Doctors</button>
+        <button
+            class="btn btn-link text-decoration-none px-0 rounded-0 shadow-none nav-custom-tab"
+            id="pills-practices-tab" data-bs-toggle="pill" data-bs-target="#pills-practices" type="button" role="tab"
+            aria-controls="pills-practices" aria-selected="false">Practices</button>
+    </div>
+
+    <!-- TITLES CONTAINER -->
+    <div>
+        <div id="header-doctors" class="">
+            <h2 class="display-6 mb-0">Registered Doctors</h2>
+        </div>
+        <div id="header-practices" class="d-none">
+            <h2 class="display-6 mb-0">Registered Practices</h2>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Simple script to toggle headers based on tab
+    const tabs = document.querySelectorAll('button[data-bs-toggle="pill"]');
+    tabs.forEach(tab => {
+        tab.addEventListener('shown.bs.tab', event => {
+            const targetId = event.target.getAttribute('data-bs-target');
+            if (targetId === '#pills-doctors') {
+                document.getElementById('header-doctors').classList.remove('d-none');
+                document.getElementById('header-practices').classList.add('d-none');
+            } else if (targetId === '#pills-practices') {
+                document.getElementById('header-doctors').classList.add('d-none');
+                document.getElementById('header-practices').classList.remove('d-none');
+            }
+        })
+    })
+</script>
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+    
+    
+
+</body>
+
+</html>

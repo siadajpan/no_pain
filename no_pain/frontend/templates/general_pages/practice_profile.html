@@ -1,0 +1,51 @@
+{% extends "shared/base.html" %}
+
+{% block title %}
+<title>{{ practice.name }} - No Pain</title>
+{% endblock %}
+{% block page_heading %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{ practice.name }}</h1>
+            <h6 class="card-subtitle mb-2 text-muted">Practice</h6>
+            
+            <div class="mb-3">
+                <p class="mb-1"><strong>Address:</strong></p>
+                <p class="mb-0">{{ practice.street_address }}</p>
+                <p class="mb-0">{{ practice.city }}, {{ practice.postcode }}</p>
+            </div>
+            
+            {% if practice.phone %}
+            <p class="card-text"><strong>Phone:</strong> {{ practice.phone }}</p>
+            {% endif %}
+            
+            <p class="card-text"><strong>Email:</strong> <a href="mailto:{{ practice.user.email }}">{{ practice.user.email }}</a></p>
+            
+            <hr>
+            
+            <h5>Doctors</h5>
+            {% if practice.doctors %}
+            <ul class="list-group">
+                {% for doc in practice.doctors %}
+                <li class="list-group-item">
+                    {{ doc.user.first_name }} {{ doc.user.last_name }}
+                    {% if doc.specialization %}
+                    <span class="badge bg-secondary ms-2">{{ doc.specialization }}</span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No doctors listed for this practice.</p>
+            {% endif %}
+            
+            <div class="mt-3">
+                <a href="/" class="btn btn-outline-primary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

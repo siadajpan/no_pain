@@ -9,11 +9,11 @@ from no_pain.backend.webapps.auth import route_verify
 
 api_router = APIRouter()
 api_router.include_router(route_user.router, prefix="/user", tags=["user-webapp"])
-api_router.include_router(home.router, prefix="", tags=["user-webapp"])
 api_router.include_router(route_health.health_router, prefix="")
-
-
 
 api_router.include_router(route_login.router, prefix="", tags=["auth-webapp"])
 api_router.include_router(route_user_login.router, prefix="", tags=["auth-webapp"])
 api_router.include_router(route_verify.router, prefix="", tags=["auth-webapp"])
+
+# home.router MUST be last because it has a /{slug} catch-all route
+api_router.include_router(home.router, prefix="", tags=["user-webapp"])

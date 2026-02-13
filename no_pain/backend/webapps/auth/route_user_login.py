@@ -34,12 +34,12 @@ templates = Jinja2Templates(directory=TEMPLATES_DIR)
 router = APIRouter(include_in_schema=False)
 
 
-@router.get("/forgot-password/")
+@router.get("/forgot-password")
 async def forgot_password_form(request: Request):
     return templates.TemplateResponse("auth/forgot_password.html", {"request": request})
 
 
-@router.post("/forgot-password/")
+@router.post("/forgot-password")
 async def forgot_password(
     request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)
 ):
@@ -156,12 +156,12 @@ async def reset_password(request: Request, db: Session = Depends(get_db)):
         )
 
 
-@router.get("/register/")
+@router.get("/register")
 async def register_form(request: Request):
     return templates.TemplateResponse("auth/register.html", {"request": request})
 
 
-@router.post("/register/")
+@router.post("/register")
 async def register(
     request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)
 ):
@@ -209,7 +209,7 @@ async def register(
     )
 
 
-@router.post("/login/")
+@router.post("/login")
 async def login(request: Request, db: Session = Depends(get_db)):
     form = await request.form()
     errors = []
@@ -231,7 +231,7 @@ async def login(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/login/")
+@router.get("/login")
 async def login(request: Request):
     return templates.TemplateResponse(
         "auth/login.html",
@@ -412,7 +412,7 @@ async def finish_google_registration(request: Request, db: Session = Depends(get
         )
 
 
-@router.get("/logout/")
+@router.get("/logout")
 async def login(request: Request):
     response = responses.RedirectResponse(
         "/?msg=Successfully logged out", status_code=status.HTTP_302_FOUND

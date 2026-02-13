@@ -8,5 +8,3 @@ from no_pain.backend.db.models.patient import Patient  # noqa
 from no_pain.backend.db.models.practice import Practice  # noqa
 from no_pain.backend.db.models.associations import practice_doctor, practice_patient  # noqa
 
-# List of all models for metadata
-# models = (User, Team, Game, ChipStructure, Chip, BuyIn, CashOut, AddOn, ChipAmount)
