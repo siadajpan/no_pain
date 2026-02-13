@@ -3,9 +3,37 @@
 {% endblock %} {% block page_heading %}Register{% endblock %} {% block content%}
 
 <form method="POST">
-  <div class="form-floating mb-3">
-    <input type="text" required class="form-control" id="nick" name="nick" value="{{nick}}" placeholder="Nick" />
-    <label>Nick</label>
+  <div class="mb-3">
+    <div class="form-floating">
+        <select class="form-select" id="role" name="role" required onchange="toggleFields()">
+            <option value="patient" selected>Patient</option>
+            <option value="doctor">Doctor</option>
+            <option value="practice">Practice</option>
+        </select>
+        <label for="role">I am a</label>
+    </div>
+  </div>
+
+  <div id="name_fields" class="row mb-3">
+    <div class="col">
+        <div class="form-floating">
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{first_name}}" placeholder="First Name" />
+            <label>First Name</label>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-floating">
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{{last_name}}" placeholder="Last Name" />
+            <label>Last Name</label>
+        </div>
+    </div>
+  </div>
+
+  <div id="practice_name_field" class="mb-3 d-none">
+    <div class="form-floating">
+        <input type="text" class="form-control" name="practice_name" placeholder="Practice Name" />
+        <label>Practice Name</label>
+    </div>
   </div>
   <div class="form-floating mb-3">
     <input type="email" class="form-control" name="email" placeholder="name@example.com" value="{{ username }}" />
@@ -27,6 +55,77 @@
       </div>
     </div>
   </div>
+
+
+
+  <div id="doctor_fields" class="mb-3 d-none">
+    <div class="form-floating">
+        <input type="text" class="form-control" name="profile_picture" placeholder="Profile Picture URL" />
+        <label>Profile Picture URL</label>
+    </div>
+  </div>
+
+  <div id="practice_fields" class="mb-3 d-none">
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" name="street_address" placeholder="Street Address" />
+                <label>Street Address</label>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" name="city" placeholder="City" />
+                <label>City</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" name="postcode" placeholder="Postcode" />
+                <label>Postcode</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control" name="phone" placeholder="Phone Number" />
+                <label>Phone Number</label>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleFields() {
+        const role = document.getElementById('role').value;
+        const doctorFields = document.getElementById('doctor_fields');
+        const practiceFields = document.getElementById('practice_fields');
+        const nameFields = document.getElementById('name_fields');
+        const practiceNameField = document.getElementById('practice_name_field');
+
+        if (role === 'doctor') {
+            doctorFields.classList.remove('d-none');
+            practiceFields.classList.add('d-none');
+            nameFields.classList.remove('d-none');
+            practiceNameField.classList.add('d-none');
+        } else if (role === 'practice') {
+            doctorFields.classList.add('d-none');
+            practiceFields.classList.remove('d-none');
+            nameFields.classList.add('d-none');
+            practiceNameField.classList.remove('d-none');
+        } else {
+            doctorFields.classList.add('d-none');
+            practiceFields.classList.add('d-none');
+            nameFields.classList.remove('d-none');
+            practiceNameField.classList.add('d-none');
+        }
+    }
+    // Set initial state
+    toggleFields();
+  </script>
 
 
 

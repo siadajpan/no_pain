@@ -1,27 +1,47 @@
 from typing import List, Optional
-from no_pain.backend.core.config import settings
-from pydantic import BaseModel, field_validator
-
 from fastapi import Request
-
-from pydantic import EmailStr
+from no_pain.backend.core.config import settings
+from pydantic import BaseModel, EmailStr, field_validator, model_validator
+from typing import Optional
 
 
 class UserCreate(BaseModel):
     email: Optional[EmailStr] = None
-    nick: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     password: Optional[str] = None
     repeat_password: Optional[str] = None
+    role: Optional[str] = "patient"
+    street_address: Optional[str] = None
+    city: Optional[str] = None
+    postcode: Optional[str] = None
+    profile_picture: Optional[str] = None
+    practice_name: Optional[str] = None
+    phone: Optional[str] = None
 
-    @field_validator("nick")
-    def is_nick_valid(cls, nick):
-        if not nick:
-            raise ValueError("Nick is required")
-        if len(nick) < settings.NICK_LENGTH:
-            raise ValueError(
-                f"Nick needs to be at least {settings.NICK_LENGTH} characters"
-            )
-        return nick
+    @model_validator(mode='after')
+    def validate_names_based_on_role(self):
+        role = self.role
+        if role == "practice":
+            if not self.practice_name:
+                raise ValueError("Practice Name is required")
+            if not self.street_address:
+                raise ValueError("Street Address is required")
+            if not self.city:
+                raise ValueError("City is required")
+            if not self.postcode:
+                raise ValueError("Postcode is required")
+        else:
+            # Patient or Doctor or default
+            if not self.first_name:
+                raise ValueError("First Name is required")
+            if len(self.first_name) < 2:
+                raise ValueError("First Name needs to be at least 2 characters")
+            if not self.last_name:
+                raise ValueError("Last Name is required")
+            if len(self.last_name) < 2:
+                raise ValueError("Last Name needs to be at least 2 characters")
+        return self
 
     @field_validator("email")
     def is_email_valid(cls, email):
@@ -53,7 +73,8 @@ class UserCreate(BaseModel):
 class UserShow(BaseModel):
     id: int
     email: str
-    nick: str
+    first_name: str
+    last_name: str
 
     class Config:
         from_attributes = True
